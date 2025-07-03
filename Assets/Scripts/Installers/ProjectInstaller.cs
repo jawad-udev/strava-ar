@@ -50,6 +50,7 @@ public class ProjectInstaller : MonoInstaller<ProjectInstaller>
         Container.BindInterfacesAndSelfTo<SplashScreen>().FromComponentInNewPrefab(gameElements.splashScreen).AsSingle();
         Container.BindInterfacesAndSelfTo<HomeScreen>().FromComponentInNewPrefab(gameElements.homeScreen).AsSingle();
         Container.BindInterfacesAndSelfTo<GamePlayScreen>().FromComponentInNewPrefab(gameElements.gamePlayScreen).AsSingle();
+        Container.BindInterfacesAndSelfTo<StravaLogin>().FromComponentInNewPrefab(gameElements.loginScreen).AsSingle();
 
         //Ui Popups
         Container.BindInterfacesAndSelfTo<CommonPopup>().FromComponentInNewPrefab(gameElements.commonPopup).AsSingle();
