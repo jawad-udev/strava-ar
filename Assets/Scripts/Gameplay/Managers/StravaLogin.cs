@@ -1,37 +1,48 @@
 using UnityEngine;
 using TMPro;
 
-public class StravaLogin : GameMonoBehaviour
+public class StravaLogin : MonoBehaviour
 {
     [Header("UI Elements")]
     public TextMeshProUGUI statusText;
     public TMP_InputField codeInputField;
 
-    public void OnLoginButtonPressed()
+    // Called by "Login" button to open Strava login URL
+    public void OnClickLogin()
     {
         string url = StravaClient.Instance.GetLoginUrl();
         Application.OpenURL(url);
-        ShowStatus(" Opening Strava login page...");
+        SetStatus("Opening Strava login page...");
     }
 
-    public void OnSubmitCodePressed()
+    // Called by "Submit Code" button after user pastes auth code
+    public void OnClickSubmitCode()
     {
         string code = codeInputField.text.Trim();
         if (string.IsNullOrEmpty(code))
         {
-            ShowStatus(" Please enter a code.");
+            SetStatus("Please enter a valid code.");
             return;
         }
 
-        ShowStatus(" Exchanging code for token...");
-        StravaClient.Instance.ExchangeCodeForToken(code,
-            onSuccess: _ => ShowStatus(" Login successful!"),
-            onError: err => ShowStatus(" Login failed: " + err));
+        SetStatus("Authenticating...");
+
+        StravaClient.Instance.ExchangeCodeForToken(code, 
+            onSuccess: (json) =>
+            {
+                SetStatus("Strava login successful!");
+                Debug.Log("Token Exchange Response: " + json);
+            },
+            onError: (error) =>
+            {
+                SetStatus("Login failed: " + error);
+                Debug.LogError("Token Error: " + error);
+            });
     }
 
-    private void ShowStatus(string message)
+    private void SetStatus(string msg)
     {
         if (statusText != null)
-            statusText.text = message;
+            statusText.text = msg;
     }
 }

@@ -9,6 +9,7 @@ public class Services : SingletonMonobehaviour<Services>
 
     [Inject] private PlayerService _playerService;
     [Inject] private BackLogService _backLogService;
+    [Inject] private UserService _userService;
     [Inject] private InputService _inputService;
     [Inject] private UIService _uiService;
     [Inject] private AudioService _audioService;
@@ -53,6 +54,10 @@ public class Services : SingletonMonobehaviour<Services>
         get { return instance._playerService; }
     }
 
+    public static UserService UserService
+    {
+        get { return instance._userService; }
+    }
     public static BackLogService BackLogService
     {
         get { return instance._backLogService; }
