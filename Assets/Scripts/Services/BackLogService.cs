@@ -102,7 +102,7 @@ public class BackLogService : MonoBehaviour
 
     public void DisableAndremoveAllScreens()
     {
-        foreach(GameObject screen in pileOfScreen)
+        foreach (GameObject screen in pileOfScreen)
         {
             screen.SetActive(false);
         }
@@ -127,9 +127,9 @@ public class BackLogService : MonoBehaviour
 
     private void Update()
     {
-        if (Input.GetKeyDown(KeyCode.Escape))
-        {
-            CloseLastUI();
-        }
+        // if (Input.GetKeyDown(KeyCode.Escape))
+        // {
+        //     CloseLastUI();
+        // }
     }
 }

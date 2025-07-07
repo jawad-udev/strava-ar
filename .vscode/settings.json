@@ -66,5 +66,5 @@
     "explorer.fileNesting.patterns": {
         "*.sln": "*.csproj"
     },
-    "dotnet.defaultSolution": "strava-ar.sln"
+    "dotnet.defaultSolution": "StravaAR.sln"
 }

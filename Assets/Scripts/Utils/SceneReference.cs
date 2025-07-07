@@ -287,12 +287,20 @@ public class SceneReferencePropertyDrawer : PropertyDrawer
         {
             var labelRect = DrawUtils.GetLabelRect(position);
             var iconRect = labelRect;
-            iconRect.width = iconContent.image.width + PAD_SIZE;
-            labelRect.width -= iconRect.width;
-            labelRect.x += iconRect.width;
-            EditorGUI.PrefixLabel(iconRect, sceneControlID, iconContent);
+
+            // Safely get width of image, fallback to 0 if image is null
+            float iconWidth = (iconContent.image != null) ? iconContent.image.width + PAD_SIZE : 0;
+
+            iconRect.width = iconWidth;
+            labelRect.width -= iconWidth;
+            labelRect.x += iconWidth;
+
+            if (iconWidth > 0)
+                EditorGUI.PrefixLabel(iconRect, sceneControlID, iconContent);
+
             EditorGUI.PrefixLabel(labelRect, sceneControlID, labelContent);
         }
+
 
         // Right context buttons
         var buttonRect = DrawUtils.GetFieldRect(position);

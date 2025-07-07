@@ -1,6 +1,4 @@
 using UnityEngine;
-using UnityEngine.UI;
-using System.Collections.Generic;
 
 [CreateAssetMenu(fileName = "GameElements", menuName = "ScriptableObjects/GameElements", order = 1)]
 public class GameElements : ScriptableObject
@@ -13,6 +11,7 @@ public class GameElements : ScriptableObject
     public GameService gameService;
     public AudioService audioService;
     public SceneService sceneService;
+    public UserService userService;
 
     [Header("UI Screens")]
     public SplashScreen splashScreen;

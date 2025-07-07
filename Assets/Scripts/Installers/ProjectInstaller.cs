@@ -27,6 +27,7 @@ public class ProjectInstaller : MonoInstaller<ProjectInstaller>
         Container.BindInterfacesAndSelfTo<GameService>().FromComponentInNewPrefab(gameElements.gameService).AsSingle().NonLazy();
         Container.BindInterfacesAndSelfTo<AudioService>().FromComponentInNewPrefab(gameElements.audioService).AsSingle().NonLazy();
         Container.BindInterfacesAndSelfTo<SceneService>().FromComponentInNewPrefab(gameElements.sceneService).AsSingle().NonLazy();
+        Container.BindInterfacesAndSelfTo<UserService>().FromComponentInNewPrefab(gameElements.userService).AsSingle().NonLazy();
 
         Container.Bind<InputService>().FromNewComponentOnNewGameObject().WithGameObjectName("InputService").AsSingle()
             .OnInstantiated((InjectContext context, InputService x) => { x.gameObject.AddComponent<AutoParentToServices>(); }).NonLazy();
