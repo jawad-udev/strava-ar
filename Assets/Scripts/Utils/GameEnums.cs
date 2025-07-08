@@ -27,7 +27,8 @@ public enum Screens
 {
     SPLASH,
     HOME,
-    PLAY
+    PLAY,
+    LOGIN
 }
 
 public enum Popups

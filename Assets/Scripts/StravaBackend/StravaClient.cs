@@ -6,8 +6,8 @@ using UnityEngine.Networking;
 
 public class StravaClient : MonoBehaviour
 {
-    private const string clientId = "166612";
-    private const string clientSecret = "dff62ecbb731ba53b61c0436b9334af6348c93f2";
+    public const string clientId = "166612";
+    public const string clientSecret = "dff62ecbb731ba53b61c0436b9334af6348c93f2";
     private const string redirectUri = "http://localhost"; // For Editor testing only
     private const string baseUrl = "https://www.strava.com/api/v3/";
 
@@ -30,12 +30,12 @@ public class StravaClient : MonoBehaviour
     }
 
     // Exchange authorization code for access token
-    public void ExchangeCodeForToken(string code, Action<StravaTokenResponse> onSuccess, Action<string> onError)
+    public void ExchangeCodeForToken(string code, Action<string> onSuccess, Action<string> onError)
     {
-        StartCoroutine(TokenExchangeCoroutine(code, onSuccess, onError));
+        StartCoroutine(TokenCoroutine(code, onSuccess, onError));
     }
 
-    private IEnumerator TokenExchangeCoroutine(string code, Action<StravaTokenResponse> onSuccess, Action<string> onError)
+    private IEnumerator TokenCoroutine(string code, Action<string> onSuccess, Action<string> onError)
     {
         WWWForm form = new WWWForm();
         form.AddField("client_id", clientId);
@@ -43,20 +43,24 @@ public class StravaClient : MonoBehaviour
         form.AddField("code", code);
         form.AddField("grant_type", "authorization_code");
 
-        using (UnityWebRequest req = UnityWebRequest.Post("https://www.strava.com/oauth/token", form))
+        using (UnityWebRequest request = UnityWebRequest.Post("https://www.strava.com/oauth/token", form))
         {
-            yield return req.SendWebRequest();
+            yield return request.SendWebRequest();
 
-            if (req.result == UnityWebRequest.Result.Success)
+            if (request.result == UnityWebRequest.Result.Success)
             {
-                var token = JsonUtility.FromJson<StravaTokenResponse>(req.downloadHandler.text);
-                PlayerPrefs.SetString("strava_access_token", token.access_token);
-                PlayerPrefs.SetString("strava_refresh_token", token.refresh_token);
-                onSuccess?.Invoke(token);
+                var json = request.downloadHandler.text;
+                Debug.Log("Token Response: " + json);
+                var tokenResponse = JsonUtility.FromJson<StravaTokenResponse>(json);
+
+                PlayerPrefs.SetString("strava_access_token", tokenResponse.access_token);
+                PlayerPrefs.SetString("strava_refresh_token", tokenResponse.refresh_token);
+                onSuccess?.Invoke(json);
             }
             else
             {
-                onError?.Invoke("Token exchange failed: " + req.error);
+                Debug.LogError("Token Error: " + request.error);
+                onError?.Invoke(request.error);
             }
         }
     }
@@ -85,9 +89,9 @@ public class StravaClient : MonoBehaviour
         {
             try
             {
-                // Wrap response for JsonUtility parsing
+                // Manually wrap list response to use Unity's JsonUtility
                 string wrappedJson = "{\"list\":" + req.downloadHandler.text + "}";
-                var wrapper = JsonUtility.FromJson<StravaActivityListWrapper>(wrappedJson);
+                var wrapper = JsonUtility.FromJson<StravaActivityWrapper>(wrappedJson);
                 onSuccess?.Invoke(wrapper.list);
             }
             catch (Exception ex)

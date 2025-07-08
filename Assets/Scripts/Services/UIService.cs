@@ -21,6 +21,10 @@ public class UIService
         {
             GamePlayScreen.Show();
         }
+        else if (screenType.Equals(Screens.LOGIN))
+        {
+            LoginScreen.Show();
+        }
     }
 
     public void ActivateUIPopups(Popups popupType)
@@ -78,6 +82,16 @@ public class UIService
         get
         {
             return _gamePlayScreen;
+        }
+    }
+
+    [Inject]
+    private LoginScreen _loginScreen;
+    public LoginScreen LoginScreen
+    {
+        get
+        {
+            return _loginScreen;
         }
     }
 

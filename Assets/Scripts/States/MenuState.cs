@@ -10,7 +10,7 @@ public class MenuState : _StatesBase
 	{
 		Debug.Log("Menu State OnActive");
 		Services.BackLogService.DisableAndremoveAllScreens();
-		Services.UIService.ActivateUIScreen(Screens.HOME);
+		Services.UIService.ActivateUIScreen(Screens.LOGIN);
 		Services.GameService.gameStatus = GameStatus.TOSTART;
 		Services.CameraService.ResetCameraSize();
 		Services.AudioService.PlayGameMusic();

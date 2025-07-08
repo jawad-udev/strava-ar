@@ -23,6 +23,7 @@ public class ProjectInstaller : MonoInstaller<ProjectInstaller>
         Container.Bind<VibrationService>().AsSingle().NonLazy();
         Container.Bind<ScoreService>().AsSingle().NonLazy();
         Container.Bind<CameraService>().AsSingle().NonLazy();
+        Container.Bind<UserService>().AsSingle().NonLazy();
 
         Container.BindInterfacesAndSelfTo<GameService>().FromComponentInNewPrefab(gameElements.gameService).AsSingle().NonLazy();
         Container.BindInterfacesAndSelfTo<AudioService>().FromComponentInNewPrefab(gameElements.audioService).AsSingle().NonLazy();
@@ -51,7 +52,7 @@ public class ProjectInstaller : MonoInstaller<ProjectInstaller>
         Container.BindInterfacesAndSelfTo<SplashScreen>().FromComponentInNewPrefab(gameElements.splashScreen).AsSingle();
         Container.BindInterfacesAndSelfTo<HomeScreen>().FromComponentInNewPrefab(gameElements.homeScreen).AsSingle();
         Container.BindInterfacesAndSelfTo<GamePlayScreen>().FromComponentInNewPrefab(gameElements.gamePlayScreen).AsSingle();
-        Container.BindInterfacesAndSelfTo<StravaLogin>().FromComponentInNewPrefab(gameElements.loginScreen).AsSingle();
+        Container.BindInterfacesAndSelfTo<LoginScreen>().FromComponentInNewPrefab(gameElements.loginScreen).AsSingle();
 
         //Ui Popups
         Container.BindInterfacesAndSelfTo<CommonPopup>().FromComponentInNewPrefab(gameElements.commonPopup).AsSingle();
@@ -61,6 +62,5 @@ public class ProjectInstaller : MonoInstaller<ProjectInstaller>
         Container.BindInterfacesAndSelfTo<PausePopup>().FromComponentInNewPrefab(gameElements.pausePopup).AsSingle();
         Container.BindInterfacesAndSelfTo<ProfilePopup>().FromComponentInNewPrefab(gameElements.profilePopup).AsSingle();
         Container.BindInterfacesAndSelfTo<SettingsPopup>().FromComponentInNewPrefab(gameElements.settingsPopup).AsSingle();
-
     }
 }

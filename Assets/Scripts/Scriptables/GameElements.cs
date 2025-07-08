@@ -17,7 +17,7 @@ public class GameElements : ScriptableObject
     public SplashScreen splashScreen;
     public HomeScreen homeScreen;
     public GamePlayScreen gamePlayScreen;
-    public StravaLogin loginScreen;
+    public LoginScreen loginScreen;
 
     [Header("UI Popups")]
     public ProfilePopup profilePopup;

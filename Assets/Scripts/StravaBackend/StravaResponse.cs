@@ -38,7 +38,8 @@ public class StravaMap
 }
 
 [Serializable]
-public class StravaActivityListWrapper
+public class StravaActivityWrapper
 {
     public List<StravaActivity> list;
 }
+
