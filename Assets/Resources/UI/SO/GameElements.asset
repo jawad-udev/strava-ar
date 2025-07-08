@@ -12,40 +12,19 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 8615284bc22574a9babf735d00d421c9, type: 3}
   m_Name: GameElements
   m_EditorClassIdentifier: 
-  globalCanvasPrefab: {fileID: 6795078353630966417, guid: bd49e2e25af5442a49fb63628e1a2e0c,
-    type: 3}
-  servicesPrefab: {fileID: 7497442479629002566, guid: c92010f84e0ca4a8fb0f43095dd04604,
-    type: 3}
-  gameService: {fileID: 4011092048593120400, guid: 46ab8bdd698ad4c259a467418fb83417,
-    type: 3}
-  audioService: {fileID: 1589721190095796978, guid: f890faddb0ae2412d9bce4736846b6d8,
-    type: 3}
-  sceneService: {fileID: 6719988270421093388, guid: 8efd54e2a561640b297e4ac41269ccf1,
-    type: 3}
-<<<<<<< Updated upstream
-  userService: {fileID: 1158620124211205692, guid: c5c7adbe1fc294a5c8beda85168b1c05,
-    type: 3}
-=======
->>>>>>> Stashed changes
-  splashScreen: {fileID: 8190513833329637244, guid: 7f5b59e2c11574863941a52c2fdb6af0,
-    type: 3}
-  homeScreen: {fileID: 4623369086073574629, guid: dab11514f85834e9dad390d11b7a29d5,
-    type: 3}
-  gamePlayScreen: {fileID: 102680818079442727, guid: 6b571e87af9084ca1adb09a23e7b3cae,
-    type: 3}
-  loginScreen: {fileID: 4252512819182356295, guid: 70f9847e2e9ae8141904c2b17c79b7c8,
-    type: 3}
-  profilePopup: {fileID: -6597539612717108014, guid: ebeb02b00c13a49a68c2c3cf0eceee22,
-    type: 3}
-  settingsPopup: {fileID: -4460710447617718622, guid: 5791ea291b7744cd18624f912510e0a5,
-    type: 3}
-  commonPopup: {fileID: 7898004257729450924, guid: 51ef5caecb7824813ae1db6dab70419b,
-    type: 3}
-  pausePopup: {fileID: 6467713580756684427, guid: 954273ab9e5e64416907a77aa0c6df4c,
-    type: 3}
-  gameWinPopup: {fileID: -3404977289551637366, guid: 23dd00ebebfe44f6fa0052345429be10,
-    type: 3}
-  gameLosePopup: {fileID: 4728052634909131396, guid: 83fcd43c754ec4e79a8a57e7690b9aff,
-    type: 3}
-  gameFailPopup: {fileID: 2608850169691633002, guid: 68d1851d5a1aa4eb0bd5b8bcbd2b1027,
-    type: 3}
+  globalCanvasPrefab: {fileID: 6795078353630966417, guid: bd49e2e25af5442a49fb63628e1a2e0c, type: 3}
+  servicesPrefab: {fileID: 7497442479629002566, guid: c92010f84e0ca4a8fb0f43095dd04604, type: 3}
+  gameService: {fileID: 4011092048593120400, guid: 46ab8bdd698ad4c259a467418fb83417, type: 3}
+  audioService: {fileID: 1589721190095796978, guid: f890faddb0ae2412d9bce4736846b6d8, type: 3}
+  sceneService: {fileID: 6719988270421093388, guid: 8efd54e2a561640b297e4ac41269ccf1, type: 3}
+  googleMobileAdsService: {fileID: 5898368071341534172, guid: 500aacb7d828e44aeb2783474ab26f6c, type: 3}
+  splashScreen: {fileID: 8190513833329637244, guid: 7f5b59e2c11574863941a52c2fdb6af0, type: 3}
+  homeScreen: {fileID: 4623369086073574629, guid: dab11514f85834e9dad390d11b7a29d5, type: 3}
+  gamePlayScreen: {fileID: 102680818079442727, guid: 6b571e87af9084ca1adb09a23e7b3cae, type: 3}
+  profilePopup: {fileID: -6597539612717108014, guid: ebeb02b00c13a49a68c2c3cf0eceee22, type: 3}
+  settingsPopup: {fileID: -4460710447617718622, guid: 5791ea291b7744cd18624f912510e0a5, type: 3}
+  commonPopup: {fileID: 7898004257729450924, guid: 51ef5caecb7824813ae1db6dab70419b, type: 3}
+  pausePopup: {fileID: 6467713580756684427, guid: 954273ab9e5e64416907a77aa0c6df4c, type: 3}
+  gameWinPopup: {fileID: -3404977289551637366, guid: 23dd00ebebfe44f6fa0052345429be10, type: 3}
+  gameLosePopup: {fileID: 4728052634909131396, guid: 83fcd43c754ec4e79a8a57e7690b9aff, type: 3}
+  gameFailPopup: {fileID: 2608850169691633002, guid: 68d1851d5a1aa4eb0bd5b8bcbd2b1027, type: 3}
