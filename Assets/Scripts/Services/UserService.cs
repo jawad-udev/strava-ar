@@ -2,7 +2,7 @@ using System;
 using System.Collections.Generic;
 using UnityEngine;
 
-public class UserService:MonoBehaviour
+public class UserService
 {
     public void LoginWithStravaCode(string code, Action<StravaTokenResponse> onSuccess, Action<string> onError)
     {
