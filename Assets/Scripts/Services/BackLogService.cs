@@ -127,9 +127,9 @@ public class BackLogService : MonoBehaviour
 
     private void Update()
     {
-        // if (Input.GetKeyDown(KeyCode.Escape))
-        // {
-        //     CloseLastUI();
-        // }
+       /*  if (Input.GetKeyDown(KeyCode.Escape))
+        {
+            CloseLastUI();
+        } */
     }
 }
