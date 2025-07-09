@@ -25,8 +25,9 @@ public class StravaActivity
 {
     public long id;
     public string name;
-    public float distance;
-    public int moving_time;
+    public float distance;               // meters
+    public int moving_time;             // seconds
+    public float total_elevation_gain;  // meters
     public string start_date;
     public StravaMap map;
 }
@@ -40,6 +41,6 @@ public class StravaMap
 [Serializable]
 public class StravaActivityWrapper
 {
-    public List<StravaActivity> list;
+    public List<StravaActivity> activities;
 }
 
