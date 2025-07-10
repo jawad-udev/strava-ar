@@ -11,7 +11,7 @@ public class GameElements : ScriptableObject
     public GameService gameService;
     public AudioService audioService;
     public SceneService sceneService;
-    public UserService userService;
+    public UserClient userService;
 
     [Header("UI Screens")]
     public SplashScreen splashScreen;
