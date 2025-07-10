@@ -35,6 +35,11 @@ public class UserClient:GameMonoBehaviour
             });
     }
 
+    public void FetchActivityDetail(long activityId, Action<StravaActivityDetail> onSuccess, Action<string> onError)
+    {
+        StravaClient.FetchActivityDetail(activityId, onSuccess, onError);
+    }
+
     public bool IsUserAuthenticated()
     {
         return PlayerPrefs.HasKey("strava_access_token");

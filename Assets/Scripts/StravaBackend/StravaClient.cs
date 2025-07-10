@@ -167,4 +167,38 @@ public static class StravaClient
             onError?.Invoke("Fetch Error: " + req.error);
         }
     }
+
+    public static void FetchActivityDetail(long activityId, Action<StravaActivityDetail> onSuccess, Action<string> onError)
+    {
+        CoroutineRunner.Instance.StartCoroutine(FetchActivityDetailCoroutine(activityId, onSuccess, onError));
+    }
+
+    private static IEnumerator FetchActivityDetailCoroutine(long activityId, Action<StravaActivityDetail> onSuccess, Action<string> onError)
+    {
+        string accessToken = PlayerPrefs.GetString("strava_access_token", "");
+
+        UnityWebRequest req = UnityWebRequest.Get($"{baseUrl}activities/{activityId}");
+        req.SetRequestHeader("Authorization", $"Bearer {accessToken}");
+
+        yield return req.SendWebRequest();
+
+        if (req.result == UnityWebRequest.Result.Success)
+        {
+            try
+            {
+                var activityDetail = JsonConvert.DeserializeObject<StravaActivityDetail>(req.downloadHandler.text);
+                onSuccess?.Invoke(activityDetail);
+            }
+            catch (Exception ex)
+            {
+                Debug.LogError("Detail Parse Error: " + ex.Message);
+                onError?.Invoke("Failed to parse activity details.");
+            }
+        }
+        else
+        {
+            Debug.LogError("Fetch detail failed: " + req.error);
+            onError?.Invoke("Activity detail fetch failed.");
+        }
+    }
 }

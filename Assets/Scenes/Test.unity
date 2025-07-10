@@ -416,9 +416,14 @@ PrefabInstance:
       propertyPath: m_LocalEulerAnglesHint.z
       value: 0
       objectReference: {fileID: 0}
-    - target: {fileID: 3346240876126776156, guid: 70f9847e2e9ae8141904c2b17c79b7c8,
+    - target: {fileID: 4252512819182356295, guid: 70f9847e2e9ae8141904c2b17c79b7c8,
         type: 3}
-      propertyPath: m_VerticalScrollbar
+      propertyPath: activitiesParent
+      value: 
+      objectReference: {fileID: 0}
+    - target: {fileID: 4252512819182356295, guid: 70f9847e2e9ae8141904c2b17c79b7c8,
+        type: 3}
+      propertyPath: fetchActivitiesBtn
       value: 
       objectReference: {fileID: 0}
     - target: {fileID: 6268341078543754344, guid: 70f9847e2e9ae8141904c2b17c79b7c8,
@@ -773,11 +778,6 @@ PrefabInstance:
     serializedVersion: 3
     m_TransformParent: {fileID: 2145626623}
     m_Modifications:
-    - target: {fileID: 636606937976107928, guid: 6b571e87af9084ca1adb09a23e7b3cae,
-        type: 3}
-      propertyPath: m_AnchoredPosition.y
-      value: -0.00024414062
-      objectReference: {fileID: 0}
     - target: {fileID: 8190513833329637184, guid: 6b571e87af9084ca1adb09a23e7b3cae,
         type: 3}
       propertyPath: m_Name

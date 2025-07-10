@@ -33,6 +33,18 @@ public class StravaActivity
 }
 
 [Serializable]
+public class StravaActivityDetail
+{
+    public long id;
+    public string name;
+    public float distance;
+    public int moving_time;
+    public float total_elevation_gain;
+    public float average_heartrate;
+    public float max_heartrate;
+}
+
+[Serializable]
 public class StravaMap
 {
     public string summary_polyline;
