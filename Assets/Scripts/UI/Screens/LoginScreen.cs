@@ -13,12 +13,16 @@ public class LoginScreen : GameMonoBehaviour
     public Button loginBtn, submitCodeBtn;
     public Button backButton;
 
-    
+
 
     private void Start()
     {
         loginBtn.onClick.AddListener(OnClickLogin);
         submitCodeBtn.onClick.AddListener(OnClickSubmitCode);
+        if (Services.UserService.IsUserAuthenticated())
+        {
+            LoginSuccesss();
+        }
     }
 
     private void OnClickLogin()
@@ -44,6 +48,7 @@ public class LoginScreen : GameMonoBehaviour
             {
                 SetStatus("Authentication successful!");
                 SetUIInteractable(true);
+                LoginSuccesss();
             },
             onError: error =>
             {
@@ -53,7 +58,7 @@ public class LoginScreen : GameMonoBehaviour
             });
     }
 
-    
+
 
     private void SetStatus(string message)
     {
@@ -65,5 +70,10 @@ public class LoginScreen : GameMonoBehaviour
         loginBtn.interactable = interactable;
         submitCodeBtn.interactable = interactable;
         codeInputField.interactable = interactable;
+    }
+
+    private void LoginSuccesss()
+    {
+        Services.UIService.ActivateUIScreen(Screens.PLAY);
     }
 }

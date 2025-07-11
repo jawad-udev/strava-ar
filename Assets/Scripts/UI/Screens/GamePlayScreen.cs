@@ -95,7 +95,7 @@ public class GamePlayScreen : GameMonoBehaviour
         }
     }
 
-    private void OnActivitySelected(StravaActivity activity, TextMeshProUGUI heartRateText)
+        private void OnActivitySelected(StravaActivity activity, TextMeshProUGUI heartRateText)
     {
         Services.UserService.FetchActivityDetail(activity.id,
             detail =>
@@ -104,9 +104,28 @@ public class GamePlayScreen : GameMonoBehaviour
                 PlayerPrefs.SetString("selected_polyline", activity.map?.summary_polyline ?? "");
 
                 heartRateText.text = $"Avg HR: {detail.average_heartrate:F0} bpm\n" +
-                                     $"Max HR: {detail.max_heartrate:F0} bpm";
+                                    $"Max HR: {detail.max_heartrate:F0} bpm";
 
                 Debug.Log($"Selected activity with HR: {detail.name}");
+
+                // Add Lap Display if any
+                if (detail.laps != null && detail.laps.Count > 0)
+                {
+                    string lapSummary = "\nLaps:\n";
+                    foreach (var lap in detail.laps)
+                    {
+                        TimeSpan lapTime = TimeSpan.FromSeconds(lap.elapsedTime);
+                        lapSummary += $"- Lap {lap.lapIndex}: {lap.distance / 1000f:F2}km, {lapTime.Minutes}m {lapTime.Seconds}s\n";
+                    }
+
+                    heartRateText.text += lapSummary;
+                }
+                else
+                {
+                    heartRateText.text += "\nNo lap data found.";
+                }
+
+                // Optional: Load AR Scene
                 // SceneManager.LoadScene("ARScene");
             },
             error =>
@@ -115,6 +134,7 @@ public class GamePlayScreen : GameMonoBehaviour
                 Debug.LogError($"Failed to load activity detail: {error}");
             });
     }
+
 
     private void SetUIInteractable(bool interactable)
     {

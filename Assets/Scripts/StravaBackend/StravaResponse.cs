@@ -1,5 +1,6 @@
 using System;
 using System.Collections.Generic;
+using Newtonsoft.Json;
 
 [Serializable]
 public class StravaTokenResponse
@@ -42,6 +43,36 @@ public class StravaActivityDetail
     public float total_elevation_gain;
     public float average_heartrate;
     public float max_heartrate;
+
+    [JsonProperty("laps")]
+    public List<StravaLap> laps;
+}
+
+[Serializable]
+public class StravaLap
+{
+    public long id;
+    public string name;
+
+    [JsonProperty("elapsed_time")]
+    public int elapsedTime;
+
+    [JsonProperty("moving_time")]
+    public int movingTime;
+
+    public float distance;
+
+    [JsonProperty("start_date")]
+    public string startDateUtc;
+
+    [JsonProperty("start_date_local")]
+    public string startDateLocal;
+
+    [JsonProperty("average_speed")]
+    public float averageSpeed;
+
+    [JsonProperty("lap_index")]
+    public int lapIndex;
 }
 
 [Serializable]

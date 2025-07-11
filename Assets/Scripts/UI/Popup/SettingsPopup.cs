@@ -8,29 +8,23 @@ public class SettingsPopup : GameMonoBehaviour
 {
     public Button musicButton, soundButton, vibrationButton, closeButton, clearData, showDebugButton;
 
+    //  Add new UI fields
+    public Dropdown sexDropdown;
+    public Dropdown buildDropdown;
+    public Dropdown modelTypeDropdown;
+
     void Awake()
     {
-        //musicButton.onClick.AsObservable().Subscribe(x => OnClickMusicButton());
-        //soundButton.onClick.AsObservable().Subscribe(x => OnClickSoundButton());
-        //vibrationButton.onClick.AsObservable().Subscribe(x => OnClickVibrationButton());
         closeButton.onClick.AsObservable().Subscribe(x => OnClickCloseButton());
         clearData.onClick.AsObservable().Subscribe(x => OnClickClearDataButton());
         showDebugButton.onClick.AsObservable().Subscribe(x => OnClickShowDebugButton());
-    }
 
-    void OnClickMusicButton()
-    {
-        Services.AudioService.PlayUIClick();
-    }
+        //  Dropdown listeners
+        sexDropdown.onValueChanged.AddListener(OnSexChanged);
+        buildDropdown.onValueChanged.AddListener(OnBuildChanged);
+        modelTypeDropdown.onValueChanged.AddListener(OnModelTypeChanged);
 
-    void OnClickSoundButton()
-    {
-        Services.AudioService.PlayUIClick();
-    }
-
-    void OnClickVibrationButton()
-    {
-        Services.AudioService.PlayUIClick();
+        LoadSettings(); // Load previous choices
     }
 
     void OnClickCloseButton()
@@ -48,7 +42,32 @@ public class SettingsPopup : GameMonoBehaviour
 
     void OnClickShowDebugButton()
     {
-        // Services.DebugConsole.SetActive(true);
         Services.AudioService.PlayUIClick();
+    }
+
+    // Dropdown callbacks
+    void OnSexChanged(int index)
+    {
+        PlayerPrefs.SetInt("model_sex", index); // 0 = Male, 1 = Female
+        Debug.Log("Sex changed to: " + sexDropdown.options[index].text);
+    }
+
+    void OnBuildChanged(int index)
+    {
+        PlayerPrefs.SetInt("model_build", index); // 0 = Solid, 1 = Slim
+        Debug.Log("Build changed to: " + buildDropdown.options[index].text);
+    }
+
+    void OnModelTypeChanged(int index)
+    {
+        PlayerPrefs.SetInt("model_type", index); // 0 = Bike, 1 = Runner
+        Debug.Log("Model type changed to: " + modelTypeDropdown.options[index].text);
+    }
+
+    void LoadSettings()
+    {
+        sexDropdown.value = PlayerPrefs.GetInt("model_sex", 0);
+        buildDropdown.value = PlayerPrefs.GetInt("model_build", 0);
+        modelTypeDropdown.value = PlayerPrefs.GetInt("model_type", 0);
     }
 }
