@@ -76,6 +76,54 @@ public class StravaLap
 }
 
 [Serializable]
+public class StravaZone
+{
+    [JsonProperty("score")]
+    public int score;
+
+    [JsonProperty("distribution_buckets")]
+    public DistributionBuckets distributionBuckets;
+
+    [JsonProperty("type")]
+    public string type;
+}
+
+[Serializable]
+public class DistributionBuckets
+{
+    [JsonProperty("max")]
+    public int max;
+
+    [JsonProperty("min")]
+    public int min;
+
+    [JsonProperty("type")]
+    public string type;
+
+    [JsonProperty("buckets")]
+    public List<int> buckets;
+}
+
+[Serializable]
+public class StravaPhoto
+{
+    [JsonProperty("id")]
+    public long id;
+
+    [JsonProperty("unique_id")]
+    public string uniqueId;
+
+    [JsonProperty("urls")]
+    public Dictionary<string, string> urls;  // keys: 100, 600, etc.
+
+    [JsonProperty("source")]
+    public int source;
+
+    [JsonProperty("created_at")]
+    public string createdAt;
+}
+
+[Serializable]
 public class StravaMap
 {
     public string summary_polyline;
@@ -86,4 +134,3 @@ public class StravaActivityWrapper
 {
     public List<StravaActivity> activities;
 }
-

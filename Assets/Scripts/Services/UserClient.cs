@@ -2,10 +2,8 @@ using System;
 using System.Collections.Generic;
 using UnityEngine;
 
-public class UserClient:GameMonoBehaviour
+public class UserClient : GameMonoBehaviour
 {
-    
-
     public void Login(string code, Action onSuccess, Action<string> onError)
     {
         StravaClient.ExchangeCodeForToken(code,
@@ -24,7 +22,8 @@ public class UserClient:GameMonoBehaviour
     public void FetchUserActivities(Action<List<StravaActivity>> onSuccess, Action<string> onError)
     {
         StravaClient.FetchActivities(
-            activities => {
+            activities =>
+            {
                 Debug.Log($"UserClient received {activities.Count} activities.");
                 onSuccess?.Invoke(activities);
             },
@@ -38,6 +37,21 @@ public class UserClient:GameMonoBehaviour
     public void FetchActivityDetail(long activityId, Action<StravaActivityDetail> onSuccess, Action<string> onError)
     {
         StravaClient.FetchActivityDetail(activityId, onSuccess, onError);
+    }
+
+    public void FetchActivityLaps(long activityId, Action<List<StravaLap>> onSuccess, Action<string> onError)
+    {
+        StravaClient.FetchActivityLaps(activityId, onSuccess, onError);
+    }
+
+    public void FetchActivityZones(long activityId, Action<List<StravaZone>> onSuccess, Action<string> onError)
+    {
+        StravaClient.FetchActivityZones(activityId, onSuccess, onError);
+    }
+
+    public void FetchActivityPhotos(long activityId, Action<List<StravaPhoto>> onSuccess, Action<string> onError)
+    {
+        StravaClient.FetchActivityPhotos(activityId, onSuccess, onError);
     }
 
     public bool IsUserAuthenticated()

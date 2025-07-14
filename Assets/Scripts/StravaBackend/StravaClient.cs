@@ -1,5 +1,4 @@
-// StravaClient.cs
-#define USE_EDITOR_REDIRECT // Comment this out for Android build
+#define USE_EDITOR_REDIRECT
 
 using System;
 using System.Collections;
@@ -21,20 +20,14 @@ public static class StravaClient
 
     private const string baseUrl = "https://www.strava.com/api/v3/";
 
-    public static string GetLoginUrl()
-    {
-        return $"https://www.strava.com/oauth/authorize" +
-               $"?client_id={clientId}" +
-               $"&response_type=code" +
-               $"&redirect_uri={redirectUri}" +
-               $"&scope=read,activity:read_all" +
-               $"&approval_prompt=auto";
-    }
+    // ---------------- AUTH ----------------
+    public static string GetLoginUrl() =>
+        $"https://www.strava.com/oauth/authorize" +
+        $"?client_id={clientId}&response_type=code" +
+        $"&redirect_uri={redirectUri}&scope=read,activity:read_all&approval_prompt=auto";
 
-    public static void ExchangeCodeForToken(string code, Action onSuccess, Action<string> onError)
-    {
+    public static void ExchangeCodeForToken(string code, Action onSuccess, Action<string> onError) =>
         CoroutineRunner.Instance.StartCoroutine(TokenCoroutine(code, onSuccess, onError));
-    }
 
     private static IEnumerator TokenCoroutine(string code, Action onSuccess, Action<string> onError)
     {
@@ -44,32 +37,16 @@ public static class StravaClient
         form.AddField("code", code);
         form.AddField("grant_type", "authorization_code");
 
-        using (UnityWebRequest request = UnityWebRequest.Post("https://www.strava.com/oauth/token", form))
+        using UnityWebRequest req = UnityWebRequest.Post("https://www.strava.com/oauth/token", form);
+        yield return req.SendWebRequest();
+
+        if (req.result == UnityWebRequest.Result.Success)
         {
-            yield return request.SendWebRequest();
-
-            if (request.result == UnityWebRequest.Result.Success)
-            {
-                var json = request.downloadHandler.text;
-                var token = JsonConvert.DeserializeObject<StravaTokenResponse>(json);
-                SaveTokenData(token);
-                Debug.Log("Token Success");
-                onSuccess?.Invoke();
-            }
-            else
-            {
-                Debug.LogError("Token Error: " + request.error);
-                onError?.Invoke("Token Error: " + request.error);
-            }
+            var token = JsonConvert.DeserializeObject<StravaTokenResponse>(req.downloadHandler.text);
+            SaveTokenData(token);
+            onSuccess?.Invoke();
         }
-    }
-
-    private static void SaveTokenData(StravaTokenResponse token)
-    {
-        PlayerPrefs.SetString("strava_access_token", token.access_token);
-        PlayerPrefs.SetString("strava_refresh_token", token.refresh_token);
-        int expiry = (int)(DateTime.UtcNow.Ticks / TimeSpan.TicksPerSecond) + token.expires_in;
-        PlayerPrefs.SetInt("strava_token_expiry", expiry);
+        else onError?.Invoke("Token Error: " + req.error);
     }
 
     public static void RefreshToken(Action onSuccess, Action<string> onError)
@@ -92,92 +69,45 @@ public static class StravaClient
         form.AddField("grant_type", "refresh_token");
         form.AddField("refresh_token", refreshToken);
 
-        using (UnityWebRequest request = UnityWebRequest.Post("https://www.strava.com/oauth/token", form))
-        {
-            yield return request.SendWebRequest();
+        using UnityWebRequest req = UnityWebRequest.Post("https://www.strava.com/oauth/token", form);
+        yield return req.SendWebRequest();
 
-            if (request.result == UnityWebRequest.Result.Success)
-            {
-                var token = JsonConvert.DeserializeObject<StravaTokenResponse>(request.downloadHandler.text);
-                SaveTokenData(token);
-                onSuccess?.Invoke();
-            }
-            else
-            {
-                onError?.Invoke("Refresh Error: " + request.error);
-            }
+        if (req.result == UnityWebRequest.Result.Success)
+        {
+            var token = JsonConvert.DeserializeObject<StravaTokenResponse>(req.downloadHandler.text);
+            SaveTokenData(token);
+            onSuccess?.Invoke();
         }
+        else onError?.Invoke("Refresh Error: " + req.error);
+    }
+
+    private static void SaveTokenData(StravaTokenResponse token)
+    {
+        PlayerPrefs.SetString("strava_access_token", token.access_token);
+        PlayerPrefs.SetString("strava_refresh_token", token.refresh_token);
+        int expiry = (int)(DateTime.UtcNow.Ticks / TimeSpan.TicksPerSecond) + token.expires_in;
+        PlayerPrefs.SetInt("strava_token_expiry", expiry);
     }
 
     private static bool IsTokenExpired()
     {
-        int expiryTime = PlayerPrefs.GetInt("strava_token_expiry", 0);
-        int currentTime = (int)(DateTime.UtcNow.Ticks / TimeSpan.TicksPerSecond);
-        return currentTime >= expiryTime;
+        int expiry = PlayerPrefs.GetInt("strava_token_expiry", 0);
+        int now = (int)(DateTime.UtcNow.Ticks / TimeSpan.TicksPerSecond);
+        return now >= expiry;
     }
 
-    public static void FetchActivities(Action<List<StravaActivity>> onSuccess, Action<string> onError)
+    // ---------------- GENERIC FETCH ----------------
+    private static void Get<T>(string endpoint, Action<T> onSuccess, Action<string> onError)
     {
-        if (IsTokenExpired())
-        {
-            Debug.Log("Token expired. Refreshing...");
-            RefreshToken(
-                () => CoroutineRunner.Instance.StartCoroutine(FetchActivitiesCoroutine(onSuccess, onError)),
-                error => onError?.Invoke("Token Refresh Failed: " + error)
-            );
-        }
-        else
-        {
-            CoroutineRunner.Instance.StartCoroutine(FetchActivitiesCoroutine(onSuccess, onError));
-        }
+        void Run() => CoroutineRunner.Instance.StartCoroutine(FetchCoroutine(endpoint, onSuccess, onError));
+        if (IsTokenExpired()) RefreshToken(Run, onError);
+        else Run();
     }
 
-    private static IEnumerator FetchActivitiesCoroutine(Action<List<StravaActivity>> onSuccess, Action<string> onError)
+    private static IEnumerator FetchCoroutine<T>(string endpoint, Action<T> onSuccess, Action<string> onError)
     {
         string accessToken = PlayerPrefs.GetString("strava_access_token", "");
-        UnityWebRequest req = UnityWebRequest.Get($"{baseUrl}athlete/activities?per_page=50");
-        req.SetRequestHeader("Authorization", $"Bearer {accessToken}");
-
-        yield return req.SendWebRequest();
-
-        if (req.result == UnityWebRequest.Result.Success)
-        {
-            string json = req.downloadHandler.text;
-
-            if (string.IsNullOrEmpty(json) || json == "[]")
-            {
-                Debug.LogWarning("No activities found.");
-                onSuccess?.Invoke(new List<StravaActivity>());
-                yield break;
-            }
-
-            try
-            {
-                var activities = JsonConvert.DeserializeObject<List<StravaActivity>>(json);
-                onSuccess?.Invoke(activities);
-            }
-            catch (Exception ex)
-            {
-                Debug.LogError("Activity Parse Error: " + ex.Message);
-                onError?.Invoke("Failed to parse activities.");
-            }
-        }
-        else
-        {
-            onError?.Invoke("Fetch Error: " + req.error);
-        }
-    }
-
-    public static void FetchActivityDetail(long activityId, Action<StravaActivityDetail> onSuccess, Action<string> onError)
-    {
-        CoroutineRunner.Instance.StartCoroutine(FetchActivityDetailCoroutine(activityId, onSuccess, onError));
-    }
-
-    private static IEnumerator FetchActivityDetailCoroutine(long activityId, Action<StravaActivityDetail> onSuccess, Action<string> onError)
-    {
-        string accessToken = PlayerPrefs.GetString("strava_access_token", "");
-
-        UnityWebRequest req = UnityWebRequest.Get($"{baseUrl}activities/{activityId}");
+        using UnityWebRequest req = UnityWebRequest.Get(baseUrl + endpoint);
         req.SetRequestHeader("Authorization", $"Bearer {accessToken}");
 
         yield return req.SendWebRequest();
@@ -186,19 +116,27 @@ public static class StravaClient
         {
             try
             {
-                var activityDetail = JsonConvert.DeserializeObject<StravaActivityDetail>(req.downloadHandler.text);
-                onSuccess?.Invoke(activityDetail);
+                T data = JsonConvert.DeserializeObject<T>(req.downloadHandler.text);
+                onSuccess?.Invoke(data);
             }
-            catch (Exception ex)
-            {
-                Debug.LogError("Detail Parse Error: " + ex.Message);
-                onError?.Invoke("Failed to parse activity details.");
-            }
+            catch (Exception ex) { onError?.Invoke("Parse error: " + ex.Message); }
         }
-        else
-        {
-            Debug.LogError("Fetch detail failed: " + req.error);
-            onError?.Invoke("Activity detail fetch failed.");
-        }
+        else onError?.Invoke("Fetch failed: " + req.error);
     }
+
+    // ---------------- ENDPOINT WRAPPERS ----------------
+    public static void FetchActivities(Action<List<StravaActivity>> onSuccess, Action<string> onError) =>
+        Get("athlete/activities?per_page=50", onSuccess, onError);
+
+    public static void FetchActivityDetail(long activityId, Action<StravaActivityDetail> onSuccess, Action<string> onError) =>
+        Get($"activities/{activityId}", onSuccess, onError);
+
+    public static void FetchActivityLaps(long activityId, Action<List<StravaLap>> onSuccess, Action<string> onError) =>
+        Get($"activities/{activityId}/laps", onSuccess, onError);
+
+    public static void FetchActivityZones(long activityId, Action<List<StravaZone>> onSuccess, Action<string> onError) =>
+        Get($"activities/{activityId}/zones", onSuccess, onError);
+
+    public static void FetchActivityPhotos(long activityId, Action<List<StravaPhoto>> onSuccess, Action<string> onError) =>
+        Get($"activities/{activityId}/photos", onSuccess, onError);
 }
