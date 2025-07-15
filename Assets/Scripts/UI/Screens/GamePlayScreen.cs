@@ -11,6 +11,7 @@ public class GamePlayScreen : GameMonoBehaviour
 {
     public Button pauseButton, profileButton;
     public TextMeshProUGUI statusText;
+    public TextMeshProUGUI heartRateTxt, lapsTxt;
     public Button fetchActivitiesBtn;
     public GameObject activitiesPanel;
 
@@ -76,26 +77,26 @@ public class GamePlayScreen : GameMonoBehaviour
         {
             GameObject item = Instantiate(activityItemPrefab, activitiesParent);
             var texts = item.GetComponentsInChildren<TextMeshProUGUI>();
-            if (texts.Length < 2)
+            if (texts.Length < 1)
             {
-                Debug.LogError("Prefab must have 2 TextMeshProUGUI components.");
+                Debug.LogError("Prefab must have 1 TextMeshProUGUI components.");
                 continue;
             }
 
             TimeSpan time = TimeSpan.FromSeconds(activity.moving_time);
-            texts[0].text = $"{activity.name}\n" +
+            texts[0].text = $"Name: {activity.name}\n" +
                             $"Distance: {activity.distance / 1000f:F1}km\n" +
                             $"Time: {time.Hours}h {time.Minutes}m\n" +
                             $"Elevation: {activity.total_elevation_gain:F0}m";
 
-            texts[1].text = "Loading heart rate...";
+            heartRateTxt.text = "Loading heart rate...";
 
             Button btn = item.GetComponent<Button>();
-            btn.onClick.AddListener(() => OnActivitySelected(activity, texts[1]));
+            btn.onClick.AddListener(() => OnActivitySelected(activity, heartRateTxt));
         }
     }
 
-        private void OnActivitySelected(StravaActivity activity, TextMeshProUGUI heartRateText)
+    private void OnActivitySelected(StravaActivity activity, TextMeshProUGUI heartRateText)
     {
         Services.UserService.FetchActivityDetail(activity.id,
             detail =>
@@ -118,11 +119,12 @@ public class GamePlayScreen : GameMonoBehaviour
                         lapSummary += $"- Lap {lap.lapIndex}: {lap.distance / 1000f:F2}km, {lapTime.Minutes}m {lapTime.Seconds}s\n";
                     }
 
-                    heartRateText.text += lapSummary;
+                    //heartRateText.text += lapSummary;
+                    lapsTxt.text = lapSummary;
                 }
                 else
                 {
-                    heartRateText.text += "\nNo lap data found.";
+                    lapsTxt.text = "\nNo lap data found.";
                 }
 
                 // Optional: Load AR Scene

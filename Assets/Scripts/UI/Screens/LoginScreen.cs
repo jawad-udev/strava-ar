@@ -74,6 +74,6 @@ public class LoginScreen : GameMonoBehaviour
 
     private void LoginSuccesss()
     {
-        Services.UIService.ActivateUIScreen(Screens.PLAY);
+       Services.GameService.SetState<GamePlayState>();
     }
 }

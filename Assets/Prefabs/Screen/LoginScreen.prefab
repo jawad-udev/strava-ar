@@ -2972,11 +2972,6 @@ MonoBehaviour:
   codeInputField: {fileID: 3191956548228986404}
   loginBtn: {fileID: 3457078633352997090}
   submitCodeBtn: {fileID: 4376006651799094556}
-  fetchActivitiesBtn: {fileID: 0}
-  activitiesPanel: {fileID: 0}
-  activitiesParent: {fileID: 0}
-  activityItemPrefab: {fileID: 9150539611910752058, guid: 9c6d8ea5c776f9c4ab0dd6a801133332,
-    type: 3}
   backButton: {fileID: 0}
 --- !u!1 &6582698193694922584
 GameObject:
