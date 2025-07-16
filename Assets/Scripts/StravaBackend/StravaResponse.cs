@@ -16,9 +16,17 @@ public class StravaTokenResponse
 [Serializable]
 public class StravaAthlete
 {
+    public long id;
     public string username;
     public string firstname;
     public string lastname;
+    public string city;
+    public string country;
+    public string sex;
+    public int follower_count;
+    public int friend_count;
+    public string profile; // Profile picture URL
+    public string email;
 }
 
 [Serializable]
@@ -133,4 +141,46 @@ public class StravaMap
 public class StravaActivityWrapper
 {
     public List<StravaActivity> activities;
+}
+
+[Serializable]
+public class StravaStats
+{
+    [JsonProperty("biggest_ride_distance")]
+    public float biggest_ride_distance;
+
+    [JsonProperty("biggest_climb_elevation_gain")]
+    public float biggest_climb_elevation_gain;
+
+    [JsonProperty("recent_ride_totals")]
+    public StravaTotals recent_ride_totals;
+
+    [JsonProperty("ytd_ride_totals")]
+    public StravaTotals ytd_ride_totals;
+
+    [JsonProperty("all_ride_totals")]
+    public StravaTotals all_ride_totals;
+}
+
+[Serializable]
+public class StravaTotals
+{
+    public int count;
+    public float distance;
+    public int moving_time;
+    public float elevation_gain;
+}
+
+[Serializable]
+public class StravaUserZones
+{
+    [JsonProperty("heart_rate")]
+    public List<HeartRateZone> heart_rate;
+
+    [Serializable]
+    public class HeartRateZone
+    {
+        public int min;
+        public int max;
+    }
 }

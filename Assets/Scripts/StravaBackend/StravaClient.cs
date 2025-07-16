@@ -139,4 +139,13 @@ public static class StravaClient
 
     public static void FetchActivityPhotos(long activityId, Action<List<StravaPhoto>> onSuccess, Action<string> onError) =>
         Get($"activities/{activityId}/photos", onSuccess, onError);
+
+    public static void FetchAthlete(Action<StravaAthlete> onSuccess, Action<string> onError) =>
+        Get("athlete", onSuccess, onError);
+
+    public static void FetchAthleteStats(long athleteId, Action<StravaStats> onSuccess, Action<string> onError) =>
+        Get($"athletes/{athleteId}/stats", onSuccess, onError);
+
+    public static void FetchAthleteHeartRateZones(Action<StravaUserZones> onSuccess, Action<string> onError) =>
+        Get("athlete/zones", onSuccess, onError);
 }

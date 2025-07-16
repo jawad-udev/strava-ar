@@ -19,19 +19,28 @@ public class UserClient : GameMonoBehaviour
             });
     }
 
+    public void RefreshSession(Action onSuccess, Action<string> onError)
+    {
+        StravaClient.RefreshToken(onSuccess, onError);
+    }
+
+    public bool IsUserAuthenticated()
+    {
+        return PlayerPrefs.HasKey("strava_access_token");
+    }
+
+    public void Logout()
+    {
+        PlayerPrefs.DeleteKey("strava_access_token");
+        PlayerPrefs.DeleteKey("strava_refresh_token");
+        PlayerPrefs.DeleteKey("strava_token_expiry");
+        Debug.Log("User logged out.");
+    }
+
+    // ---------------- ACTIVITY DATA ----------------
     public void FetchUserActivities(Action<List<StravaActivity>> onSuccess, Action<string> onError)
     {
-        StravaClient.FetchActivities(
-            activities =>
-            {
-                Debug.Log($"UserClient received {activities.Count} activities.");
-                onSuccess?.Invoke(activities);
-            },
-            error =>
-            {
-                Debug.LogError("FetchUserActivities failed: " + error);
-                onError?.Invoke(error);
-            });
+        StravaClient.FetchActivities(onSuccess, onError);
     }
 
     public void FetchActivityDetail(long activityId, Action<StravaActivityDetail> onSuccess, Action<string> onError)
@@ -54,21 +63,19 @@ public class UserClient : GameMonoBehaviour
         StravaClient.FetchActivityPhotos(activityId, onSuccess, onError);
     }
 
-    public bool IsUserAuthenticated()
+    // ---------------- ATHLETE INFO ----------------
+    public void FetchAthleteProfile(Action<StravaAthlete> onSuccess, Action<string> onError)
     {
-        return PlayerPrefs.HasKey("strava_access_token");
+        StravaClient.FetchAthlete(onSuccess, onError);
     }
 
-    public void RefreshSession(Action onSuccess, Action<string> onError)
+    public void FetchAthleteStats(long athleteId, Action<StravaStats> onSuccess, Action<string> onError)
     {
-        StravaClient.RefreshToken(onSuccess, onError);
+        StravaClient.FetchAthleteStats(athleteId, onSuccess, onError);
     }
 
-    public void Logout()
+    public void FetchAthleteHeartRateZones(Action<StravaUserZones> onSuccess, Action<string> onError)
     {
-        PlayerPrefs.DeleteKey("strava_access_token");
-        PlayerPrefs.DeleteKey("strava_refresh_token");
-        PlayerPrefs.DeleteKey("strava_token_expiry");
-        Debug.Log("User logged out.");
+        StravaClient.FetchAthleteHeartRateZones(onSuccess, onError);
     }
 }

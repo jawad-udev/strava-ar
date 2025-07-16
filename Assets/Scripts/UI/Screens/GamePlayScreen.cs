@@ -6,6 +6,7 @@ using UnityEngine;
 using UnityEngine.UI;
 using UniRx;
 using Newtonsoft.Json;
+using Unity.Android.Gradle.Manifest;
 
 public class GamePlayScreen : GameMonoBehaviour
 {
@@ -14,6 +15,18 @@ public class GamePlayScreen : GameMonoBehaviour
     public TextMeshProUGUI heartRateTxt, lapsTxt;
     public Button fetchActivitiesBtn;
     public GameObject activitiesPanel;
+    
+    [Header("Athlete Info")]
+    public TextMeshProUGUI athleteNameTxt;
+    public TextMeshProUGUI athleteUsernameTxt;
+    public TextMeshProUGUI athleteLocationTxt;
+    public TextMeshProUGUI athleteFollowersTxt;
+
+    [Header("Athlete Stats")]
+    public TextMeshProUGUI athleteStatsTxt;
+
+    [Header("User Heart Rate Zones")]
+    public TextMeshProUGUI heartRateZonesTxt;
 
     [Header("Activities")]
     public Transform activitiesParent;
@@ -31,6 +44,9 @@ public class GamePlayScreen : GameMonoBehaviour
     {
         if (Services.UserService.IsUserAuthenticated())
         {
+            FetchAndDisplayAthlete();
+            FetchAndDisplayAthleteStats();
+            FetchAndDisplayAthleteHeartRateZones();
             FetchAndDisplayActivities();
         }
     }
@@ -45,6 +61,51 @@ public class GamePlayScreen : GameMonoBehaviour
     {
         Services.GameService.SetState<GamePauseState>();
         Services.AudioService.PlayUIClick();
+    }
+
+    private void FetchAndDisplayAthlete()
+    {
+        Services.UserService.FetchAthleteProfile(
+            athlete =>
+            {
+                athleteNameTxt.text = $"{athlete.firstname} {athlete.lastname}";
+                athleteUsernameTxt.text = $"@{athlete.username}";
+                athleteLocationTxt.text = $"{athlete.city}, {athlete.country}";
+                athleteFollowersTxt.text = $"Followers: {athlete.follower_count}";
+
+                PlayerPrefs.SetInt("athlete_id", (int)athlete.id);
+            },
+            error =>
+            {
+                athleteNameTxt.text = "Failed to load athlete info";
+                Debug.LogError("FetchAthlete error: " + error);
+            });
+    }
+
+    private void FetchAndDisplayAthleteStats()
+    {
+        long athleteId = PlayerPrefs.GetInt("athlete_id", 0);
+        if (athleteId == 0)
+        {
+            athleteStatsTxt.text = "Athlete ID missing";
+            return;
+        }
+
+        Services.UserService.FetchAthleteStats(athleteId,
+            stats =>
+            {
+                athleteStatsTxt.text =
+                    $"Biggest Ride: {stats.biggest_ride_distance / 1000f:F1} km\n" +
+                    $"Biggest Climb: {stats.biggest_climb_elevation_gain:F0} m\n" +
+                    $"Recent Rides: {stats.recent_ride_totals.count}, {stats.recent_ride_totals.distance / 1000f:F1} km\n" +
+                    $"Year To Date: {stats.ytd_ride_totals.count}, {stats.ytd_ride_totals.distance / 1000f:F1} km\n" +
+                    $"All Time Rides: {stats.all_ride_totals.count}, {stats.all_ride_totals.distance / 1000f:F1} km";
+            },
+            error =>
+            {
+                athleteStatsTxt.text = "Failed to load athlete stats";
+                Debug.LogError("FetchAthleteStats error: " + error);
+            });
     }
 
     private void FetchAndDisplayActivities()
@@ -68,6 +129,33 @@ public class GamePlayScreen : GameMonoBehaviour
             });
     }
 
+    private void FetchAndDisplayAthleteHeartRateZones()
+    {
+        Services.UserService.FetchAthleteHeartRateZones(
+            zones =>
+            {
+                if (zones?.heart_rate != null && zones.heart_rate.Count > 0)
+                {
+                    heartRateZonesTxt.text = "Heart Rate Zones:\n";
+                    int zoneNumber = 1;
+                    foreach (var zone in zones.heart_rate)
+                    {
+                        heartRateZonesTxt.text +=
+                            $"Zone {zoneNumber}: {zone.min} - {zone.max} bpm\n";
+                        zoneNumber++;
+                    }
+                }
+                else
+                {
+                    heartRateZonesTxt.text = "No heart rate zones data";
+                }
+            },
+            error =>
+            {
+                heartRateZonesTxt.text = "Failed to load heart rate zones";
+                Debug.LogError("FetchUserHeartRateZones error: " + error);
+            });
+    }
     private void DisplayActivities(List<StravaActivity> activities)
     {
         foreach (Transform child in activitiesParent)
