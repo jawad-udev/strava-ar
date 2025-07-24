@@ -1,0 +1,5 @@
+/Users/jawadahmad/Documents/Unity Projects/StravaAR/.utmp/RelWithDebInfo/x4d376y1/armeabi-v7a/CMakeFiles/edit_cache.dir
+/Users/jawadahmad/Documents/Unity Projects/StravaAR/.utmp/RelWithDebInfo/x4d376y1/armeabi-v7a/CMakeFiles/rebuild_cache.dir
+/Users/jawadahmad/Documents/Unity Projects/StravaAR/.utmp/RelWithDebInfo/x4d376y1/armeabi-v7a/GameActivity/CMakeFiles/game.dir
+/Users/jawadahmad/Documents/Unity Projects/StravaAR/.utmp/RelWithDebInfo/x4d376y1/armeabi-v7a/GameActivity/CMakeFiles/edit_cache.dir
+/Users/jawadahmad/Documents/Unity Projects/StravaAR/.utmp/RelWithDebInfo/x4d376y1/armeabi-v7a/GameActivity/CMakeFiles/rebuild_cache.dir

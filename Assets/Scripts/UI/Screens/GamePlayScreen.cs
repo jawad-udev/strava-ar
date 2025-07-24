@@ -1,16 +1,13 @@
 using System;
-using System.Collections;
 using System.Collections.Generic;
 using TMPro;
 using UnityEngine;
 using UnityEngine.UI;
-using UniRx;
 using Newtonsoft.Json;
-using Unity.Android.Gradle.Manifest;
 
 public class GamePlayScreen : GameMonoBehaviour
 {
-    public Button  fetchActivitesBtn, fetchProfileInfoBtn, fetchAthleteStatsBtn, fetchHeartZonesBtn;
+    public Button fetchActivitesBtn, fetchProfileInfoBtn, fetchAthleteStatsBtn, fetchHeartZonesBtn;
     public TextMeshProUGUI statusText;
     public TextMeshProUGUI heartRateTxt, lapsTxt;
     public Button fetchActivitiesBtn;
@@ -28,7 +25,7 @@ public class GamePlayScreen : GameMonoBehaviour
 
     [Header("Activities")]
     public Transform activitiesParent;
-    public GameObject activityItemPrefab,athleteStatsPrefab;
+    public GameObject activityItemPrefab, athleteStatsPrefab;
     private List<StravaActivity> currentActivities = new List<StravaActivity>();
 
     private void Awake()
@@ -54,15 +51,15 @@ public class GamePlayScreen : GameMonoBehaviour
             athlete =>
             {
                 // Instantiate ARProfileCard in the scene
-            if (athleteProfilePrefab != null)
-            {
-                ARProfileCard card = Instantiate(athleteProfilePrefab,athleteprefabParent);
-                card.SetupAthleteInfo(athlete);
-            }
-            else
-            {
-                Debug.LogWarning("athleteProfilePrefab not assigned!");
-            }
+                if (athleteProfilePrefab != null)
+                {
+                    ARProfileCard card = Instantiate(athleteProfilePrefab, athleteprefabParent);
+                    card.SetupAthleteInfo(athlete);
+                }
+                else
+                {
+                    Debug.LogWarning("athleteProfilePrefab not assigned!");
+                }
 
                 PlayerPrefs.SetInt("athlete_id", (int)athlete.id);
             },

@@ -9,8 +9,10 @@ using Newtonsoft.Json;
 
 public static class StravaClient
 {
-    public const string clientId = "166612";
-    public const string clientSecret = "dff62ecbb731ba53b61c0436b9334af6348c93f2";
+    // public const string clientId = "166612";
+    // public const string clientSecret = "dff62ecbb731ba53b61c0436b9334af6348c93f2";
+    public const string clientId = "165849";
+    public const string clientSecret = "e275c5b5ea57bba3a71d53e1793eacb649f482e5";
 
 #if USE_EDITOR_REDIRECT
     private const string redirectUri = "http://localhost/exchange_token";
