@@ -107,10 +107,27 @@ public static class StravaClient
     private static IEnumerator FetchCoroutine<T>(string endpoint, Action<T> onSuccess, Action<string> onError)
     {
         string accessToken = PlayerPrefs.GetString("strava_access_token", "");
-        using UnityWebRequest req = UnityWebRequest.Get(baseUrl + endpoint);
+        string fullUrl = baseUrl + endpoint;
+
+        using UnityWebRequest req = UnityWebRequest.Get(fullUrl);
         req.SetRequestHeader("Authorization", $"Bearer {accessToken}");
 
         yield return req.SendWebRequest();
+
+        if (req.responseCode == 401)
+        {
+            // Token expired or invalid, try refreshing
+            Debug.LogWarning("Access token unauthorized. Attempting refresh...");
+            RefreshToken(() =>
+            {
+                // Retry after refresh
+                CoroutineRunner.Instance.StartCoroutine(FetchCoroutine(endpoint, onSuccess, onError));
+            }, error =>
+            {
+                onError?.Invoke("Token refresh failed: " + error);
+            });
+            yield break;
+        }
 
         if (req.result == UnityWebRequest.Result.Success)
         {
@@ -119,9 +136,15 @@ public static class StravaClient
                 T data = JsonConvert.DeserializeObject<T>(req.downloadHandler.text);
                 onSuccess?.Invoke(data);
             }
-            catch (Exception ex) { onError?.Invoke("Parse error: " + ex.Message); }
+            catch (Exception ex)
+            {
+                onError?.Invoke("Parse error: " + ex.Message);
+            }
         }
-        else onError?.Invoke("Fetch failed: " + req.error);
+        else
+        {
+            onError?.Invoke("Fetch failed: " + req.error);
+        }
     }
 
     // ---------------- ENDPOINT WRAPPERS ----------------

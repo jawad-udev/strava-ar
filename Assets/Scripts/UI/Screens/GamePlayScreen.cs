@@ -10,17 +10,15 @@ using Unity.Android.Gradle.Manifest;
 
 public class GamePlayScreen : GameMonoBehaviour
 {
-    public Button pauseButton, profileButton;
+    public Button  fetchActivitesBtn, fetchProfileInfoBtn, fetchAthleteStatsBtn, fetchHeartZonesBtn;
     public TextMeshProUGUI statusText;
     public TextMeshProUGUI heartRateTxt, lapsTxt;
     public Button fetchActivitiesBtn;
     public GameObject activitiesPanel;
-    
+
     [Header("Athlete Info")]
-    public TextMeshProUGUI athleteNameTxt;
-    public TextMeshProUGUI athleteUsernameTxt;
-    public TextMeshProUGUI athleteLocationTxt;
-    public TextMeshProUGUI athleteFollowersTxt;
+    public Transform athleteprefabParent;
+    public ARProfileCard athleteProfilePrefab;
 
     [Header("Athlete Stats")]
     public TextMeshProUGUI athleteStatsTxt;
@@ -30,54 +28,46 @@ public class GamePlayScreen : GameMonoBehaviour
 
     [Header("Activities")]
     public Transform activitiesParent;
-    public GameObject activityItemPrefab;
+    public GameObject activityItemPrefab,athleteStatsPrefab;
     private List<StravaActivity> currentActivities = new List<StravaActivity>();
 
     private void Awake()
     {
-        pauseButton.onClick.AsObservable().Subscribe(_ => OnClickPauseButton());
-        profileButton.onClick.AsObservable().Subscribe(_ => OnClickProfileButton());
         fetchActivitiesBtn.onClick.AddListener(FetchAndDisplayActivities);
+        fetchProfileInfoBtn.onClick.AddListener(FetchAndDisplayAthleteProfile);
+        fetchAthleteStatsBtn.onClick.AddListener(FetchAndDisplayAthleteStats);
+        fetchHeartZonesBtn.onClick.AddListener(FetchAndDisplayAthleteHeartRateZones);
     }
 
     void Start()
     {
         if (Services.UserService.IsUserAuthenticated())
         {
-            FetchAndDisplayAthlete();
-            FetchAndDisplayAthleteStats();
-            FetchAndDisplayAthleteHeartRateZones();
             FetchAndDisplayActivities();
         }
     }
 
-    public void OnClickProfileButton()
-    {
-        Services.UIService.ActivateUIPopups(Popups.PROFILE);
-        Services.AudioService.PlayUIClick();
-    }
 
-    public void OnClickPauseButton()
-    {
-        Services.GameService.SetState<GamePauseState>();
-        Services.AudioService.PlayUIClick();
-    }
-
-    private void FetchAndDisplayAthlete()
+    private void FetchAndDisplayAthleteProfile()
     {
         Services.UserService.FetchAthleteProfile(
             athlete =>
             {
-                athleteNameTxt.text = $"{athlete.firstname} {athlete.lastname}";
-                athleteUsernameTxt.text = $"@{athlete.username}";
-                athleteLocationTxt.text = $"{athlete.city}, {athlete.country}";
-                athleteFollowersTxt.text = $"Followers: {athlete.follower_count}";
+                // Instantiate ARProfileCard in the scene
+            if (athleteProfilePrefab != null)
+            {
+                ARProfileCard card = Instantiate(athleteProfilePrefab,athleteprefabParent);
+                card.SetupAthleteInfo(athlete);
+            }
+            else
+            {
+                Debug.LogWarning("athleteProfilePrefab not assigned!");
+            }
 
                 PlayerPrefs.SetInt("athlete_id", (int)athlete.id);
             },
             error =>
             {
-                athleteNameTxt.text = "Failed to load athlete info";
                 Debug.LogError("FetchAthlete error: " + error);
             });
     }
@@ -94,7 +84,9 @@ public class GamePlayScreen : GameMonoBehaviour
         Services.UserService.FetchAthleteStats(athleteId,
             stats =>
             {
-                athleteStatsTxt.text =
+                GameObject item = Instantiate(athleteStatsPrefab, athleteprefabParent);
+                var texts = item.GetComponentsInChildren<TextMeshProUGUI>();
+                texts[1].text =
                     $"Biggest Ride: {stats.biggest_ride_distance / 1000f:F1} km\n" +
                     $"Biggest Climb: {stats.biggest_climb_elevation_gain:F0} m\n" +
                     $"Recent Rides: {stats.recent_ride_totals.count}, {stats.recent_ride_totals.distance / 1000f:F1} km\n" +
@@ -172,7 +164,7 @@ public class GamePlayScreen : GameMonoBehaviour
             }
 
             TimeSpan time = TimeSpan.FromSeconds(activity.moving_time);
-            texts[0].text = $"Name: {activity.name}\n" +
+            texts[1].text = $"Name: {activity.name}\n" +
                             $"Distance: {activity.distance / 1000f:F1}km\n" +
                             $"Time: {time.Hours}h {time.Minutes}m\n" +
                             $"Elevation: {activity.total_elevation_gain:F0}m";
