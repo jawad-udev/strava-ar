@@ -3,7 +3,82 @@ guid: 96b2ae3adfd934f8dba3b1395398ea4e
 ModelImporter:
   serializedVersion: 22200
   internalIDToNameTable: []
-  externalObjects: {}
+  externalObjects:
+  - first:
+      type: UnityEngine:Material
+      assembly: UnityEngine.CoreModule
+      name: EyeWhite
+    second: {fileID: 2100000, guid: d810708c1c56ff449b2d245664e2568b, type: 2}
+  - first:
+      type: UnityEngine:Material
+      assembly: UnityEngine.CoreModule
+      name: Iris
+    second: {fileID: 2100000, guid: 20fce6fe4dcf01043aedef65fd446492, type: 2}
+  - first:
+      type: UnityEngine:Material
+      assembly: UnityEngine.CoreModule
+      name: Material.001
+    second: {fileID: 2100000, guid: d184a12e89616094fb78241118da02bf, type: 2}
+  - first:
+      type: UnityEngine:Material
+      assembly: UnityEngine.CoreModule
+      name: highlight
+    second: {fileID: 2100000, guid: e96712d3ca26fe648abb7d533603e934, type: 2}
+  - first:
+      type: UnityEngine:Material
+      assembly: UnityEngine.CoreModule
+      name: irisBlack
+    second: {fileID: 2100000, guid: 8782bf876d421624dbceb371303d403c, type: 2}
+  - first:
+      type: UnityEngine:Material
+      assembly: UnityEngine.CoreModule
+      name: skin
+    second: {fileID: 2100000, guid: 2faae8fb6503fd84bb1c7a2749a6f02d, type: 2}
+  - first:
+      type: UnityEngine:Material
+      assembly: UnityEngine.CoreModule
+      name: white cloth
+    second: {fileID: 2100000, guid: 909fb99f2542f1a4ea81510d72ee27bb, type: 2}
+  - first:
+      type: UnityEngine:Texture2D
+      assembly: UnityEngine.CoreModule
+      name: smurf01_bodySG1_Diffuse
+    second: {fileID: 2800000, guid: 7f9e7501a7bc0944e846388ea2ed990e, type: 3}
+  - first:
+      type: UnityEngine:Texture2D
+      assembly: UnityEngine.CoreModule
+      name: smurf01_bodySG1_Glossiness
+    second: {fileID: 2800000, guid: 27cfc176a83f993459e24a9bfe6a360c, type: 3}
+  - first:
+      type: UnityEngine:Texture2D
+      assembly: UnityEngine.CoreModule
+      name: smurf01_bodySG1_Normal
+    second: {fileID: 2800000, guid: ecd7f705393b7b0449129fd81f895760, type: 3}
+  - first:
+      type: UnityEngine:Texture2D
+      assembly: UnityEngine.CoreModule
+      name: smurf01_bodySG1_Specular
+    second: {fileID: 2800000, guid: 34680b4f99bd5234b974b9563f30c85d, type: 3}
+  - first:
+      type: UnityEngine:Texture2D
+      assembly: UnityEngine.CoreModule
+      name: smurf01_bodySG_Diffuse
+    second: {fileID: 2800000, guid: 19fc1bf76f5b0a1428084783e2987996, type: 3}
+  - first:
+      type: UnityEngine:Texture2D
+      assembly: UnityEngine.CoreModule
+      name: smurf01_bodySG_Glossiness
+    second: {fileID: 2800000, guid: 75e2d874b785b294e8e14e1b97088e21, type: 3}
+  - first:
+      type: UnityEngine:Texture2D
+      assembly: UnityEngine.CoreModule
+      name: smurf01_bodySG_Normal
+    second: {fileID: 2800000, guid: d3ba794055bcc8c40a0be1f8f016ec8f, type: 3}
+  - first:
+      type: UnityEngine:Texture2D
+      assembly: UnityEngine.CoreModule
+      name: smurf01_bodySG_Specular
+    second: {fileID: 2800000, guid: 34d10ed6c2850214393122f41ebd0537, type: 3}
   materials:
     materialImportMode: 2
     materialName: 0

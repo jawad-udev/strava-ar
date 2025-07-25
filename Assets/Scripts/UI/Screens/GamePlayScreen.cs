@@ -212,8 +212,10 @@ public class GamePlayScreen : GameMonoBehaviour
                 heartRateText.text = "HR Load Failed";
                 Debug.LogError($"Failed to load activity detail: {error}");
             });
+
     }
 
+   
 
     private void SetUIInteractable(bool interactable)
     {
