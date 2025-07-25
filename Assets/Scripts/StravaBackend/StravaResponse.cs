@@ -184,3 +184,32 @@ public class StravaUserZones
         public int max;
     }
 }
+
+[Serializable]
+public class StravaStreamResponse
+{
+    public StravaStream time;
+    public StravaStream distance;
+    public StravaStream latlng;
+    public StravaStream altitude;
+    public StravaStream velocity_smooth;
+    public StravaStream heartrate;
+}
+
+[Serializable]
+public class StravaStream
+{
+    public string type;
+    public string series_type;
+    public string resolution;
+    public List<float> data;
+}
+
+[Serializable]
+public class StravaLatLngStream
+{
+    public string type;
+    public string series_type;
+    public string resolution;
+    public List<List<float>> data;
+}

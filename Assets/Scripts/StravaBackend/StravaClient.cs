@@ -173,4 +173,8 @@ public static class StravaClient
 
     public static void FetchAthleteHeartRateZones(Action<StravaUserZones> onSuccess, Action<string> onError) =>
         Get("athlete/zones", onSuccess, onError);
+    public static void FetchActivityStreams(long activityId, Action<StravaStreamResponse> onSuccess, Action<string> onError)=>
+        Get($"activities/{activityId}/streams?keys=time,distance,latlng,altitude,velocity_smooth,heartrate&key_by_type=true",
+            onSuccess, onError);
+    
 }

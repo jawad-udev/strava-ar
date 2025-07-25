@@ -78,4 +78,8 @@ public class UserClient : GameMonoBehaviour
     {
         StravaClient.FetchAthleteHeartRateZones(onSuccess, onError);
     }
+    public void FetchActivityStreams(long activityId, Action<StravaStreamResponse> onSuccess, Action<string> onError)
+    {
+        StravaClient.FetchActivityStreams(activityId, onSuccess, onError);
+    }
 }
