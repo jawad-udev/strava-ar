@@ -9,10 +9,10 @@ using Newtonsoft.Json;
 
 public static class StravaClient
 {
-    // public const string clientId = "166612";
-    // public const string clientSecret = "dff62ecbb731ba53b61c0436b9334af6348c93f2";
-    public const string clientId = "165849";
-    public const string clientSecret = "e275c5b5ea57bba3a71d53e1793eacb649f482e5";
+     public const string clientId = "166612";
+     public const string clientSecret = "dff62ecbb731ba53b61c0436b9334af6348c93f2";
+   /*  public const string clientId = "165849";
+    public const string clientSecret = "e275c5b5ea57bba3a71d53e1793eacb649f482e5"; */
 
 #if USE_EDITOR_REDIRECT
     private const string redirectUri = "http://localhost/exchange_token";
@@ -118,11 +118,9 @@ public static class StravaClient
 
         if (req.responseCode == 401)
         {
-            // Token expired or invalid, try refreshing
-            Debug.LogWarning("Access token unauthorized. Attempting refresh...");
+            Debug.LogWarning(" Access token unauthorized (401). Attempting refresh...");
             RefreshToken(() =>
             {
-                // Retry after refresh
                 CoroutineRunner.Instance.StartCoroutine(FetchCoroutine(endpoint, onSuccess, onError));
             }, error =>
             {
@@ -133,21 +131,37 @@ public static class StravaClient
 
         if (req.result == UnityWebRequest.Result.Success)
         {
+            string json = req.downloadHandler.text;
+
+            if (string.IsNullOrEmpty(json))
+            {
+                onError?.Invoke("Empty response from server.");
+                yield break;
+            }
+
             try
             {
-                T data = JsonConvert.DeserializeObject<T>(req.downloadHandler.text);
+                T data = JsonConvert.DeserializeObject<T>(json);
+                if (data == null)
+                {
+                    onError?.Invoke("Parsed data is null. Model mismatch?");
+                    yield break;
+                }
+
                 onSuccess?.Invoke(data);
             }
             catch (Exception ex)
             {
+                Debug.LogError($"JSON parse error: {ex.Message}\nResponse:\n{json}");
                 onError?.Invoke("Parse error: " + ex.Message);
             }
         }
         else
         {
-            onError?.Invoke("Fetch failed: " + req.error);
+            onError?.Invoke($"Fetch failed: {req.error} (HTTP {req.responseCode})");
         }
     }
+
 
     // ---------------- ENDPOINT WRAPPERS ----------------
     public static void FetchActivities(Action<List<StravaActivity>> onSuccess, Action<string> onError) =>

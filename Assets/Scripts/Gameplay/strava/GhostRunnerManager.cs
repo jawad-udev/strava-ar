@@ -16,14 +16,14 @@ public class GhostRunnerManager : MonoBehaviour
     private int currentIndex = 0;
     private float currentTime = 0f;
 
-    public void Init(List<List<float>> latlng, List<float> timestamps, List<float> elevation = null)
+    public void Init(List<Vector2> latlng, List<float> timestamps, List<float> elevation = null)
     {
         pathPositions.Clear();
         timeStamps.Clear();
 
         for (int i = 0; i < latlng.Count; i++)
         {
-            Vector3 pos = GeoToWorld(latlng[i][0], latlng[i][1]);
+            Vector3 pos = GeoToWorld(latlng[i].x, latlng[i].y);
             pathPositions.Add(pos);
         }
 

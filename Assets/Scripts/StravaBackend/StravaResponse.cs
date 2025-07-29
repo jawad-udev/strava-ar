@@ -42,6 +42,18 @@ public class StravaActivity
 }
 
 [Serializable]
+public class StravaMap
+{
+    public string summary_polyline;
+}
+
+[Serializable]
+public class StravaActivityWrapper
+{
+    public List<StravaActivity> activities;
+}
+
+[Serializable]
 public class StravaActivityDetail
 {
     public long id;
@@ -81,66 +93,6 @@ public class StravaLap
 
     [JsonProperty("lap_index")]
     public int lapIndex;
-}
-
-[Serializable]
-public class StravaZone
-{
-    [JsonProperty("score")]
-    public int score;
-
-    [JsonProperty("distribution_buckets")]
-    public DistributionBuckets distributionBuckets;
-
-    [JsonProperty("type")]
-    public string type;
-}
-
-[Serializable]
-public class DistributionBuckets
-{
-    [JsonProperty("max")]
-    public int max;
-
-    [JsonProperty("min")]
-    public int min;
-
-    [JsonProperty("type")]
-    public string type;
-
-    [JsonProperty("buckets")]
-    public List<int> buckets;
-}
-
-[Serializable]
-public class StravaPhoto
-{
-    [JsonProperty("id")]
-    public long id;
-
-    [JsonProperty("unique_id")]
-    public string uniqueId;
-
-    [JsonProperty("urls")]
-    public Dictionary<string, string> urls;  // keys: 100, 600, etc.
-
-    [JsonProperty("source")]
-    public int source;
-
-    [JsonProperty("created_at")]
-    public string createdAt;
-}
-
-[Serializable]
-public class StravaMap
-{
-    public string summary_polyline;
-}
-
-[Serializable]
-public class StravaActivityWrapper
-{
-    public List<StravaActivity> activities;
 }
 
 [Serializable]
@@ -186,30 +138,70 @@ public class StravaUserZones
 }
 
 [Serializable]
+public class StravaZone
+{
+    [JsonProperty("score")]
+    public int score;
+
+    [JsonProperty("distribution_buckets")]
+    public DistributionBuckets distributionBuckets;
+
+    [JsonProperty("type")]
+    public string type;
+}
+
+[Serializable]
+public class DistributionBuckets
+{
+    [JsonProperty("max")]
+    public int max;
+
+    [JsonProperty("min")]
+    public int min;
+
+    [JsonProperty("type")]
+    public string type;
+
+    [JsonProperty("buckets")]
+    public List<int> buckets;
+}
+
+[Serializable]
+public class StravaPhoto
+{
+    [JsonProperty("id")]
+    public long id;
+
+    [JsonProperty("unique_id")]
+    public string uniqueId;
+
+    [JsonProperty("urls")]
+    public Dictionary<string, string> urls;  // keys like 100, 600, etc.
+
+    [JsonProperty("source")]
+    public int source;
+
+    [JsonProperty("created_at")]
+    public string createdAt;
+}
+
+[Serializable]
+public class StreamSet<T>
+{
+    public string type;
+    public List<T> data;
+    public string series_type;
+    public int original_size;
+    public string resolution;
+}
+
+[Serializable]
 public class StravaStreamResponse
 {
-    public StravaStream time;
-    public StravaStream distance;
-    public StravaStream latlng;
-    public StravaStream altitude;
-    public StravaStream velocity_smooth;
-    public StravaStream heartrate;
-}
-
-[Serializable]
-public class StravaStream
-{
-    public string type;
-    public string series_type;
-    public string resolution;
-    public List<float> data;
-}
-
-[Serializable]
-public class StravaLatLngStream
-{
-    public string type;
-    public string series_type;
-    public string resolution;
-    public List<List<float>> data;
+    public StreamSet<float> time;
+    public StreamSet<float> distance;
+    public StreamSet<List<float>> latlng;  // list of [lat, lon]
+    public StreamSet<float> altitude;
+    public StreamSet<float> velocity_smooth;
+    public StreamSet<float> heartrate;
 }

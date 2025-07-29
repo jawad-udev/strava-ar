@@ -27,6 +27,7 @@ public class GamePlayScreen : GameMonoBehaviour
     public Transform activitiesParent;
     public GameObject activityItemPrefab, athleteStatsPrefab;
     private List<StravaActivity> currentActivities = new List<StravaActivity>();
+    public GhostRunnerManager ghostRunnerManager;
 
     private void Awake()
     {
@@ -184,9 +185,7 @@ public class GamePlayScreen : GameMonoBehaviour
                 heartRateText.text = $"Avg HR: {detail.average_heartrate:F0} bpm\n" +
                                     $"Max HR: {detail.max_heartrate:F0} bpm";
 
-                Debug.Log($"Selected activity with HR: {detail.name}");
-
-                // Add Lap Display if any
+                // LAP display
                 if (detail.laps != null && detail.laps.Count > 0)
                 {
                     string lapSummary = "\nLaps:\n";
@@ -195,8 +194,6 @@ public class GamePlayScreen : GameMonoBehaviour
                         TimeSpan lapTime = TimeSpan.FromSeconds(lap.elapsedTime);
                         lapSummary += $"- Lap {lap.lapIndex}: {lap.distance / 1000f:F2}km, {lapTime.Minutes}m {lapTime.Seconds}s\n";
                     }
-
-                    //heartRateText.text += lapSummary;
                     lapsTxt.text = lapSummary;
                 }
                 else
@@ -204,18 +201,58 @@ public class GamePlayScreen : GameMonoBehaviour
                     lapsTxt.text = "\nNo lap data found.";
                 }
 
-                // Optional: Load AR Scene
-                // SceneManager.LoadScene("ARScene");
+                // 🔥 NEW: Fetch Stream & Spawn Ghost
+                FetchAndSpawnGhost(activity.id);
             },
             error =>
             {
                 heartRateText.text = "HR Load Failed";
                 Debug.LogError($"Failed to load activity detail: {error}");
             });
-
     }
 
-   
+    public void FetchAndSpawnGhost(long activityId)
+    {
+        Services.UserService.FetchActivityStreams(activityId,
+            stream => // already a StravaStreamResponse object
+            {
+                try
+                {
+                    if (stream == null || stream.time?.data == null || stream.latlng?.data == null)
+                    {
+                        Debug.LogError("Missing essential stream data.");
+                        return;
+                    }
+
+                    var latlngRaw = stream.latlng.data;
+                    var timeRaw = stream.time.data;
+                    var elevationRaw = stream.altitude?.data ?? new List<float>();
+
+                    if (latlngRaw.Count != timeRaw.Count)
+                    {
+                        Debug.LogWarning($"Mismatch in counts: latlng = {latlngRaw.Count}, time = {timeRaw.Count}");
+                    }
+
+                    List<Vector2> latlngList = new();
+                    foreach (var pair in latlngRaw)
+                    {
+                        if (pair != null && pair.Count == 2)
+                            latlngList.Add(new Vector2(pair[0], pair[1]));
+                    }
+
+                    ghostRunnerManager.Init(latlngList, timeRaw, elevationRaw);
+                    Debug.Log("✅ Ghost spawned successfully.");
+                }
+                catch (System.Exception ex)
+                {
+                    Debug.LogError("Exception during stream parsing: " + ex.Message);
+                }
+            },
+            error =>
+            {
+                Debug.LogError("Error fetching streams: " + error);
+            });
+    }
 
     private void SetUIInteractable(bool interactable)
     {
