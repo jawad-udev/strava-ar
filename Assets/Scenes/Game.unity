@@ -4931,7 +4931,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   runnerPrefab: {fileID: 5046613308246433189, guid: f14e52782ed532b4c8404dc82b1449be,
     type: 3}
-  runnerInstance: {fileID: 1169453581}
+  runnerInstance: {fileID: 0}
   speedMultiplier: 1
   pathPositions: []
   timeStamps: []

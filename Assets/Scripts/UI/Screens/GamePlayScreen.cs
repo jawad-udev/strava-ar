@@ -201,7 +201,6 @@ public class GamePlayScreen : GameMonoBehaviour
                     lapsTxt.text = "\nNo lap data found.";
                 }
 
-                // 🔥 NEW: Fetch Stream & Spawn Ghost
                 FetchAndSpawnGhost(activity.id);
             },
             error =>
@@ -214,13 +213,25 @@ public class GamePlayScreen : GameMonoBehaviour
     public void FetchAndSpawnGhost(long activityId)
     {
         Services.UserService.FetchActivityStreams(activityId,
-            stream => // already a StravaStreamResponse object
+            stream =>
             {
                 try
                 {
-                    if (stream == null || stream.time?.data == null || stream.latlng?.data == null)
+                    if (stream == null)
                     {
-                        Debug.LogError("Missing essential stream data.");
+                        Debug.LogError("Stream object is null.");
+                        return;
+                    }
+
+                    if (stream.latlng == null || stream.latlng.data == null)
+                    {
+                        Debug.LogError("latlng stream is null.");
+                        return;
+                    }
+
+                    if (stream.time == null || stream.time.data == null)
+                    {
+                        Debug.LogError("time stream is null.");
                         return;
                     }
 
@@ -243,9 +254,9 @@ public class GamePlayScreen : GameMonoBehaviour
                     ghostRunnerManager.Init(latlngList, timeRaw, elevationRaw);
                     Debug.Log("✅ Ghost spawned successfully.");
                 }
-                catch (System.Exception ex)
+                catch (Exception ex)
                 {
-                    Debug.LogError("Exception during stream parsing: " + ex.Message);
+                    Debug.LogError(" Exception during stream parsing: " + ex.Message);
                 }
             },
             error =>
