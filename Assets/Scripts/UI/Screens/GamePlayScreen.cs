@@ -28,6 +28,7 @@ public class GamePlayScreen : GameMonoBehaviour
     public GameObject activityItemPrefab, athleteStatsPrefab;
     private List<StravaActivity> currentActivities = new List<StravaActivity>();
     public GhostRunnerManager ghostRunnerManager;
+    
 
     private void Awake()
     {
@@ -241,18 +242,30 @@ public class GamePlayScreen : GameMonoBehaviour
 
                     if (latlngRaw.Count != timeRaw.Count)
                     {
-                        Debug.LogWarning($"Mismatch in counts: latlng = {latlngRaw.Count}, time = {timeRaw.Count}");
+                        Debug.LogError($" Stream mismatch: latlng ({latlngRaw.Count}) vs time ({timeRaw.Count})");
+                        return;
                     }
+
 
                     List<Vector2> latlngList = new();
-                    foreach (var pair in latlngRaw)
+                    for (int i = 0; i < latlngRaw.Count; i++)
                     {
+                        var pair = latlngRaw[i];
                         if (pair != null && pair.Count == 2)
                             latlngList.Add(new Vector2(pair[0], pair[1]));
+                        else
+                            Debug.LogWarning($"Skipped malformed latlng at index {i}");
                     }
 
+
                     ghostRunnerManager.Init(latlngList, timeRaw, elevationRaw);
+                    Debug.Log($" Ghost initialized with {latlngList.Count} points and {timeRaw.Count} timestamps.");
                     Debug.Log("✅ Ghost spawned successfully.");
+                    if (latlngList.Count > 0)
+                    {
+                        Vector3 startPos = ghostRunnerManager.ToWorldPosition(latlngList[0]);
+                        Instantiate(ghostRunnerManager.startPointMarkerPrefab, startPos, Quaternion.identity);
+                    }
                 }
                 catch (Exception ex)
                 {
