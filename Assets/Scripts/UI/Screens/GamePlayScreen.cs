@@ -27,8 +27,6 @@ public class GamePlayScreen : GameMonoBehaviour
     public Transform activitiesParent;
     public GameObject activityItemPrefab, athleteStatsPrefab;
     private List<StravaActivity> currentActivities = new List<StravaActivity>();
-    public GhostRunnerManager ghostRunnerManager;
-    
 
     private void Awake()
     {
@@ -257,14 +255,15 @@ public class GamePlayScreen : GameMonoBehaviour
                             Debug.LogWarning($"Skipped malformed latlng at index {i}");
                     }
 
+                    GhostRunnerManager ghostRunner = Services.GameService.ghostRunner;
 
-                    ghostRunnerManager.Init(latlngList, timeRaw, elevationRaw);
+                    ghostRunner.Init(latlngList, timeRaw, elevationRaw);
                     Debug.Log($" Ghost initialized with {latlngList.Count} points and {timeRaw.Count} timestamps.");
                     Debug.Log("✅ Ghost spawned successfully.");
                     if (latlngList.Count > 0)
                     {
-                        Vector3 startPos = ghostRunnerManager.ToWorldPosition(latlngList[0]);
-                        Instantiate(ghostRunnerManager.startPointMarkerPrefab, startPos, Quaternion.identity);
+                        Vector3 startPos = ghostRunner.ToWorldPosition(latlngList[0]);
+                        Instantiate(ghostRunner.startPointMarkerPrefab, startPos, Quaternion.identity);
                     }
                 }
                 catch (Exception ex)

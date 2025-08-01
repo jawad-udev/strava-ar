@@ -163,7 +163,7 @@ MonoBehaviour:
   m_OnCullStateChanged:
     m_PersistentCalls:
       m_Calls: []
-  m_text: "Athlete \nStats\n\n"
+  m_text: "Heart \nZones\n\n"
   m_isRightToLeft: 0
   m_fontAsset: {fileID: 11400000, guid: 5094b715585444e90b7306721788dae5, type: 2}
   m_sharedMaterial: {fileID: -7410115863667296309, guid: 5094b715585444e90b7306721788dae5,
@@ -2155,7 +2155,7 @@ MonoBehaviour:
   m_TargetGraphic: {fileID: 8369523561119097224}
   m_HandleRect: {fileID: 7225377816328840106}
   m_Direction: 0
-  m_Value: 0
+  m_Value: 1
   m_Size: 1
   m_NumberOfSteps: 0
   m_OnValueChanged:
@@ -2673,6 +2673,7 @@ MonoBehaviour:
     type: 3}
   athleteStatsPrefab: {fileID: 449690967449066257, guid: 5797b20a8f05f664490397f3bdef75e6,
     type: 3}
+  ghostRunnerManager: {fileID: 0}
 --- !u!114 &8845379858269713767
 MonoBehaviour:
   m_ObjectHideFlags: 0

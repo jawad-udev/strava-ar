@@ -12,5 +12,9 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: c2e36c7ca92494d139966ba04ded75ae, type: 3}
   m_Name: GameSceneElements
   m_EditorClassIdentifier: 
-  gameSceneCanvasPrefab: {fileID: 6795078353630966417, guid: c5dbec14172a945afbe6cf1383ea8448, type: 3}
-  gameplayManager: {fileID: 2905702408404196289, guid: e7475c57e95674743aeca0529b720667, type: 3}
+  gameSceneCanvasPrefab: {fileID: 6795078353630966417, guid: c5dbec14172a945afbe6cf1383ea8448,
+    type: 3}
+  gameplayManager: {fileID: 2905702408404196289, guid: e7475c57e95674743aeca0529b720667,
+    type: 3}
+  ghostRunnerManager: {fileID: 3830731021848181699, guid: a5ab5db445210bd42b997b76b93efb05,
+    type: 3}

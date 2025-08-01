@@ -10,4 +10,8 @@ public class GameSceneElements : ScriptableObject
 
     [Header("Game Play Prefabs")]
     public GameManager gameplayManager;
+
+    [Header("Ghost Runner Manager Prefab")]
+    public GhostRunnerManager ghostRunnerManager;
+
 }

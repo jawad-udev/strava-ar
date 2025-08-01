@@ -9,5 +9,6 @@ public class GameSceneInstaller : MonoInstaller<GameSceneInstaller>
         Container.Bind<GameSceneElements>().FromInstance(gameSceneElements);
 
         Container.BindInterfacesAndSelfTo<GameManager>().FromComponentInNewPrefab(gameSceneElements.gameplayManager).AsSingle().NonLazy();
+        Container.BindInterfacesAndSelfTo<GhostRunnerManager>().FromComponentInNewPrefab(gameSceneElements.ghostRunnerManager).AsSingle().NonLazy();
     }
 }

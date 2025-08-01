@@ -1,6 +1,7 @@
 using UnityEngine;
 using System;
 using System.Collections.Generic;
+using Zenject;
 
 public class GameService : MonoBehaviour
 {
@@ -10,8 +11,9 @@ public class GameService : MonoBehaviour
 	public ColorService colorService;
 
 	public GameManager gameManager;
+	public GhostRunnerManager ghostRunner;
 	public float gameTime;
-
+	
 	public void Start()
 	{
 		isGameActive = false;
@@ -23,6 +25,8 @@ public class GameService : MonoBehaviour
 	{
 		get { return currentState; }
 	}
+
+	
 
 	//Changes the current game state
 	public void SetState(System.Type newStateType)
@@ -64,10 +68,10 @@ public class GameService : MonoBehaviour
 	#region GamePlay Managers
 
 	public void StartGame()
-    {
+	{
 		Services.SceneService.LoadGameScene();
 		ResetGameTime();
-        Services.AudioService.RestartGameMusic();
+		Services.AudioService.RestartGameMusic();
 	}
 
 	//Incase of spawning game object in the same scene

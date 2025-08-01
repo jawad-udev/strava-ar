@@ -23,6 +23,8 @@ public class GhostRunnerManager : MonoBehaviour
     private int currentIndex = 0;
     private float currentTime = 0f;
     private bool isPlaying = false;
+    private Vector2 baseLatLon;
+    private Vector3 arOrigin;
 
     public GameObject startPointMarkerPrefab;
 
@@ -41,6 +43,9 @@ public class GhostRunnerManager : MonoBehaviour
             Debug.LogError("Invalid path or timestamp data.");
             return;
         }
+        
+        baseLatLon = latLngPoints[0];
+        arOrigin = Camera.main.transform.position;
 
         for (int i = 0; i < latLngPoints.Count; i++)
         {
@@ -98,8 +103,13 @@ public class GhostRunnerManager : MonoBehaviour
     // === Convert LatLng to World Position ===
     public Vector3 ToWorldPosition(Vector2 latLon)
     {
-        float scaleFactor = 10f; // Keep this in sync across project
-        return new Vector3(latLon.y * scaleFactor, 0f, latLon.x * scaleFactor);
+        float scaleFactor = 10f;
+
+        float deltaLat = latLon.x - baseLatLon.x;
+        float deltaLon = latLon.y - baseLatLon.y;
+
+        Vector3 offset = new Vector3(deltaLon * scaleFactor, 0, deltaLat * scaleFactor);
+        return arOrigin + offset;
     }
 
     // === Debug Draw Path ===
@@ -134,7 +144,7 @@ public class GhostRunnerManager : MonoBehaviour
             routeLine.SetPosition(i, worldPos);
         }
 
-        Debug.Log($"🛣 Route drawn with {latlngList.Count} points.");
+        Debug.Log($" Route drawn with {latlngList.Count} points.");
     }
 
     // === Public API ===
