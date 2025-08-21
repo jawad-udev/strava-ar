@@ -1,0 +1,19 @@
+# ninja log v5
+0	2514	1755713123724144920	GameActivity/CMakeFiles/game.dir/UGAApplication.cpp.o	d17aee87b90b6575
+2	2398	1755713123605672791	GameActivity/CMakeFiles/game.dir/UGAInput.cpp.o	4e937cf22420b3bd
+4	2203	1755713123403764771	GameActivity/CMakeFiles/game.dir/UGASoftKeyboard.cpp.o	c453a0924c509375
+1	2108	1755713123309967463	GameActivity/CMakeFiles/game.dir/UGADebug.cpp.o	b2405978ce0d054a
+3	1988	1755713123189238408	GameActivity/CMakeFiles/game.dir/UGAInputMotionEvent.cpp.o	4c7f7e3c9bb499dd
+2514	2623	1755713123835126107	/Users/jawadahmad/Documents/Unity Projects/StravaAR/Library/Bee/Android/Prj/IL2CPP/Gradle/unityLibrary/build/intermediates/cxx/RelWithDebInfo/1f54o3f1/obj/arm64-v8a/libgame.so	5fb9ec76c423320
+0	1994	1755713123195193952	GameActivity/CMakeFiles/game.dir/UGAConfiguration.cpp.o	7e9b71f025731ca
+1	1931	1755713123125618519	GameActivity/CMakeFiles/game.dir/UGAEntry.cpp.o	68a9e35cd8a83aa2
+2	1921	1755713123118599398	GameActivity/CMakeFiles/game.dir/UGAInputKeyEvent.cpp.o	37a204cec846580a
+11	1229	1755714323478444344	GameActivity/CMakeFiles/game.dir/UGAInputKeyEvent.cpp.o	37a204cec846580a
+10	1231	1755714323480754702	GameActivity/CMakeFiles/game.dir/UGAEntry.cpp.o	68a9e35cd8a83aa2
+11	1263	1755714323515962858	GameActivity/CMakeFiles/game.dir/UGAInputMotionEvent.cpp.o	4c7f7e3c9bb499dd
+10	1275	1755714323523128005	GameActivity/CMakeFiles/game.dir/UGAConfiguration.cpp.o	7e9b71f025731ca
+10	1340	1755714323592658122	GameActivity/CMakeFiles/game.dir/UGADebug.cpp.o	b2405978ce0d054a
+13	1402	1755714323655906368	GameActivity/CMakeFiles/game.dir/UGASoftKeyboard.cpp.o	c453a0924c509375
+11	1576	1755714323824156491	GameActivity/CMakeFiles/game.dir/UGAInput.cpp.o	4e937cf22420b3bd
+9	1695	1755714323948625849	GameActivity/CMakeFiles/game.dir/UGAApplication.cpp.o	d17aee87b90b6575
+1695	1803	1755714324059200625	/Users/jawadahmad/Documents/Unity Projects/StravaAR/Library/Bee/Android/Prj/IL2CPP/Gradle/unityLibrary/build/intermediates/cxx/RelWithDebInfo/1f54o3f1/obj/arm64-v8a/libgame.so	5fb9ec76c423320

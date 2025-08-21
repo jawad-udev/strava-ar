@@ -12,6 +12,6 @@ public class GameSceneElements : ScriptableObject
     public GameManager gameplayManager;
 
     [Header("Ghost Runner Manager Prefab")]
-    public GhostRunnerManager ghostRunnerManager;
+    public GhostRunnerWithStrava ghostRunnerWithStrava;
 
 }

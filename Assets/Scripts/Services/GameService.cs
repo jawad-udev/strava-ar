@@ -12,8 +12,9 @@ public class GameService : MonoBehaviour
 
 	public GameManager gameManager;
 	public GhostRunnerManager ghostRunner;
+	public GhostRunnerWithStrava ghostRunnerWithStrava;
 	public float gameTime;
-	
+
 	public void Start()
 	{
 		isGameActive = false;
@@ -26,7 +27,7 @@ public class GameService : MonoBehaviour
 		get { return currentState; }
 	}
 
-	
+
 
 	//Changes the current game state
 	public void SetState(System.Type newStateType)
@@ -92,24 +93,25 @@ public class GameService : MonoBehaviour
 
 	public void DestryoGameplayManager()
 	{
-		if(Services.GameService.gameManager.gameObject)
+		if (Services.GameService.gameManager.gameObject)
 			DestroyImmediate(Services.GameService.gameManager.gameObject);
 	}
 
 	public void SetGameTime(float time)
-    {
+	{
 		gameTime += time;
-    }
+	}
 
-	public float GetGameTime() {
+	public float GetGameTime()
+	{
 		return gameTime;
 	}
 
-    private void ResetGameTime()
-    {
+	private void ResetGameTime()
+	{
 		gameTime = 0;
-    }
-    #endregion
+	}
+	#endregion
 
 
 	#region Game Finisher
@@ -134,5 +136,5 @@ public class GameService : MonoBehaviour
 		}
 	}
 
-    #endregion
+	#endregion
 }
