@@ -16,5 +16,5 @@ MonoBehaviour:
     type: 3}
   gameplayManager: {fileID: 2905702408404196289, guid: e7475c57e95674743aeca0529b720667,
     type: 3}
-  ghostRunnerManager: {fileID: 3830731021848181699, guid: a5ab5db445210bd42b997b76b93efb05,
+  ghostRunnerWithStrava: {fileID: 8626821948703532671, guid: ad69385e01af1d04790a27c622adda8b,
     type: 3}
