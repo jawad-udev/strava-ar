@@ -803,8 +803,8 @@ MonoBehaviour:
   mapboxToken: pk.eyJ1IjoiemVlc2hhbjc1NyIsImEiOiJjbWY1b3drOW0wODhyMmlzOTNuNmwwcXNzIn0.yiJqaF5XXGhPRjyR3OkP6Q
   width: 1000
   height: 1000
-  lat: 31.4864
-  lon: 74.3149
+  lat: 31.4502
+  lon: 74.2604
 --- !u!114 &986057999
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -836,6 +836,9 @@ MonoBehaviour:
   mapLoader: {fileID: 986057998}
   mapRect: {fileID: 986057995}
   lineRenderer: {fileID: 986058001}
+  uiPlayerIcon: {fileID: 0}
+  playerPrefab: {fileID: 3622449112435690893, guid: 9f2eade9552ae9b40a63800039da134b,
+    type: 3}
   mapboxToken: pk.eyJ1IjoiemVlc2hhbjc1NyIsImEiOiJjbWY1b3drOW0wODhyMmlzOTNuNmwwcXNzIn0.yiJqaF5XXGhPRjyR3OkP6Q
 --- !u!120 &986058001
 LineRenderer:

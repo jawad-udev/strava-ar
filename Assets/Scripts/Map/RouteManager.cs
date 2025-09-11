@@ -8,23 +8,28 @@ public class RouteManager : MonoBehaviour
 {
     [Header("References")]
     public MapClickHandler mapClickHandler;
-    public StaticMapLoader mapLoader;   // Your static map script
-    public RectTransform mapRect;       // UI map area
-    public LineRenderer lineRenderer;
+    public StaticMapLoader mapLoader;   
+    public RectTransform mapRect;       
+    public LineRenderer lineRenderer;   
+    public RectTransform uiPlayerIcon;  
+
+    [Header("3D Player")]
+    public GameObject playerPrefab;     
+    private PlayerMover playerMover;    // Reference to PlayerMover
 
     [Header("Mapbox")]
     public string mapboxToken = "YOUR_MAPBOX_ACCESS_TOKEN";
-    private const string baseUrl = "https://api.mapbox.com/directions/v5/mapbox/driving/";
+    private const string baseUrl = "https://api.mapbox.com/directions/v5/mapbox/walking/";
 
+    private List<Vector3> uiRoutePoints = new List<Vector3>();
+    private List<Vector3> worldRoutePoints = new List<Vector3>();
 
     private void Start()
     {
-        if (lineRenderer == null)
-        {
-            lineRenderer.useWorldSpace = false; // For UI
-        
-        }
+        if (lineRenderer != null)
+            lineRenderer.useWorldSpace = false; // route drawn on UI canvas
     }
+
     public void RequestRoute()
     {
         if (!mapClickHandler.HasBothPoints())
@@ -70,7 +75,6 @@ public class RouteManager : MonoBehaviour
     {
         List<Vector2> coords = new List<Vector2>();
 
-        // Find "coordinates":[[lon,lat],...]
         int startIdx = jsonText.IndexOf("\"coordinates\":");
         if (startIdx == -1) return coords;
 
@@ -79,45 +83,72 @@ public class RouteManager : MonoBehaviour
         if (startIdx == -1 || endIdx == -1) return coords;
 
         string coordBlock = jsonText.Substring(startIdx + 2, endIdx - startIdx - 2);
-
         string[] pairs = coordBlock.Split(new string[] { "],[" }, System.StringSplitOptions.RemoveEmptyEntries);
 
         foreach (string pair in pairs)
         {
             string[] parts = pair.Split(',');
             if (parts.Length == 2 &&
-                double.TryParse(parts[0], out double lon) &&
-                double.TryParse(parts[1], out double lat))
+                float.TryParse(parts[0], out float lon) &&
+                float.TryParse(parts[1], out float lat))
             {
-                coords.Add(new Vector2((float)lat, (float)lon)); // store as (lat,lon)
+                coords.Add(new Vector2(lat, lon));
             }
         }
-
         return coords;
     }
 
- private void DrawRoute(List<Vector2> coords)
-{
-    Debug.Log($"🛣️ Drawing route with {coords.Count} points");
-    lineRenderer.positionCount = coords.Count;
-
-    for (int i = 0; i < coords.Count; i++)
+    private void DrawRoute(List<Vector2> coords)
     {
-        // Show lat/lon in Console
-        Debug.Log($"📍 Point {i}: Lat = {coords[i].x}, Lon = {coords[i].y}");
+        Debug.Log($"🛣️ Drawing route with {coords.Count} points");
 
-        Vector2 worldPos = LatLonToUI(coords[i].x, coords[i].y);
-        lineRenderer.SetPosition(i, worldPos);
+        uiRoutePoints.Clear();
+        worldRoutePoints.Clear();
+
+        lineRenderer.positionCount = coords.Count;
+
+        for (int i = 0; i < coords.Count; i++)
+        {
+            // UI
+            Vector3 uiPos = LatLonToUI(coords[i].x, coords[i].y);
+            uiRoutePoints.Add(uiPos);
+            lineRenderer.SetPosition(i, uiPos);
+
+            // World
+            Vector3 worldPos = LatLonToWorld(coords[i].x, coords[i].y);
+            worldRoutePoints.Add(worldPos);
+        }
+
+        // Spawn player with PlayerMover
+        if (playerPrefab != null && worldRoutePoints.Count > 1)
+        {
+            if (playerMover == null)
+            {
+                GameObject instance = Instantiate(playerPrefab, worldRoutePoints[0], Quaternion.identity);
+                playerMover = instance.GetComponent<PlayerMover>();
+            }
+            playerMover.SetPath(worldRoutePoints);
+        }
     }
+
+private Vector3 LatLonToUI(float lat, float lon)
+{
+    float normalizedX = ((float)lon + 180f) / 360f;
+    float normalizedY = ((float)lat + 90f) / 180f;
+
+    float x = (normalizedX * mapRect.rect.width) - (mapRect.rect.width / 2f);
+    float y = (normalizedY * mapRect.rect.height) - (mapRect.rect.height / 2f);
+
+    return new Vector3(x, y, 0);
 }
 
-    private Vector3 LatLonToUI(double lat, double lon)
-    {
-        // Approximate projection: map center = mapLoader.lat/lon
-        float x = (float)((lon - mapLoader.lon) / 360.0 * mapRect.rect.width);
-        float y = (float)((lat - mapLoader.lat) / 180.0 * mapRect.rect.height);
 
-        // Offset so (0,0) is at map center
-        return new Vector3(x, y, 0);
-    }
+private Vector3 LatLonToWorld(float lat, float lon)
+{
+    float scale = 1000f; // adjust as needed
+    float x = ((float)lon - (float)mapLoader.lon) * scale;
+    float z = ((float)lat - (float)mapLoader.lat) * scale;
+    return new Vector3(x, 0, z);
+}
+
 }
